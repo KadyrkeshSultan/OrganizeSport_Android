@@ -23,4 +23,4 @@ The goals for this repository are:
 Feel free to dive in! [Open an issue](https://github.com/alexkater/OrganizerSport_IOS/issues/new) or submit PRs.
 Standard Readme follows the [Contributor Covenant](http://contributor-covenant.org/version/1/3/0/) Code of Conduct.
 ## License
-[MIT](LICENSE) © Alejandro Arjonilla Garcia
+[MIT](LICENSE)
