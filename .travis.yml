@@ -8,8 +8,8 @@ before_install:
 android:
  components:
  - tools
- - platform-tools
  - build-tools-25.0.2
+ - platform-tools
  - android-25
  - extra-google-m2repository
  - extra-android-m2repository # for design library
