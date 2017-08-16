@@ -1,0 +1,102 @@
+apply plugin: 'com.android.application'
+// Applies the Kotlin Android plugin
+apply plugin: 'kotlin-android'
+// Applies Kotlin extensions plugin
+apply plugin: 'kotlin-android-extensions'   // Allows to import 'View' objects
+
+// Gets current date in a specific format (e.g.: #Tue Apr 18 09:36:31 CEST 2017)
+def getDate() {
+    def date = new Date()
+    return date.format('dd-MM-yyyy')
+}
+
+// Select a specific Git branch depending on the build flavor
+def getGitBranchName() {
+    def gitBranchName = "HEAD"
+    gradle.startParameter.getTaskNames().each { task ->
+        if (task.contains('prod')) {
+            gitBranchName = "master"
+        } else {
+            gitBranchName = "develop"
+        }
+    }
+
+    return gitBranchName
+}
+
+android {
+    compileSdkVersion rootProject.ext.compileSdkVersion
+    buildToolsVersion rootProject.ext.buildToolsVersion
+
+    // Adds variables and definitions to handle version feature
+    def versionPropsFile = file('version.properties')
+    def version_code
+    def version_name
+    def Properties versionProps = new Properties()
+
+    // The snippet below performs similar to 'updateBoschReleaseDate', but with this current app
+    if (versionPropsFile.canRead()) {
+        versionProps.load(new FileInputStream(versionPropsFile))
+
+        version_code = gitVersionCode
+        // 'gitVersionCode' is defined in the project 'build.gradle' file
+        println 'Version code: ' + version_code
+        // Update 'version.properties'
+        versionProps['VERSION_CODE'] = version_code.toString()
+        versionProps.store(versionPropsFile.newWriter(), null)
+
+        version_name = versionProps['VERSION_NAME'].toString()
+        println 'Version name: ' + version_name
+    } else {
+        throw new GradleException("Could not read version.properties!")
+    }
+
+    defaultConfig {
+        applicationId "org.organizesport.android"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode version_code
+        versionName version_name
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    productFlavors {
+        // Development flavor
+        dev {
+            applicationIdSuffix '.dev'
+        }
+        // Testing flavor
+        beta {
+            applicationIdSuffix '.beta'
+        }
+        // Production flavor
+        prod {
+        }
+    }
+    // Although Gradle will compile any Kotlin files it finds in 'src/main/java', it's good practice
+    // to store your Kotlin files in a dedicated Kotlin directory. Here, you can see that the Kotlin
+    // plugin has added a 'src/main/kotlin' declaration to build.gradle, but note that it has not
+    // actually created this directory, so we will create it ourselves later in this article
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    androidTestCompile("com.android.support.test.espresso:espresso-core:$rootProject.ext.espressoVersion", {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
+    // Some more Material Design explicit dependencies
+    compile "com.android.support:design:$rootProject.ext.supportLibraryVersion"
+    compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
+    // Required -- JUnit 4 framework
+    testCompile "junit:junit:$rootProject.ext.junitVersion"
+}

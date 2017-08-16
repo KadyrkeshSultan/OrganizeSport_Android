@@ -1,0 +1,50 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
+buildscript {
+    // Define versions in a single place
+    ext {
+        // Sdk and tools
+        minSdkVersion = 16
+        targetSdkVersion = 25
+        compileSdkVersion = 25
+        buildToolsVersion = '25.0.2'
+        supportLibraryVersion = '25.3.1'
+        constraintLayoutVersion = '1.0.2'
+        gradleVersion = '2.3.3'
+        gradleGitVersion = '1.7.2'
+        kotlinVersion = '1.1.4'
+
+
+        // App dependencies
+        leakcanaryVersion = '1.5'
+        junitVersion = '4.12'
+    }
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "com.android.tools.build:gradle:$rootProject.ext.gradleVersion"
+        classpath "org.ajoberstar:gradle-git:$rootProject.ext.gradleGitVersion"
+
+        // NOTE: Do not place your application dependencies here; they belong
+        // in the individual module build.gradle files
+    }
+}
+
+// This block is later used in the app:build.gradle file, to fetch 'git' info
+import org.ajoberstar.grgit.Grgit
+
+ext {
+    grgit = Grgit.open(currentDir: projectDir)
+    gitVersionCode = grgit.log(includes:['HEAD']).size()
+}
+
+allprojects {
+    repositories {
+        jcenter()
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
