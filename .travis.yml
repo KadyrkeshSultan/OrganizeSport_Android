@@ -2,6 +2,9 @@
 language: android
 jdk: oraclejdk8
 
+before_install:
+ - chmod +x gradlew   # To avoid permission issues
+
 android:
  components:
  - tools
