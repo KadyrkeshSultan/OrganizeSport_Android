@@ -18,12 +18,14 @@ buildscript {
         // App dependencies
         leakcanaryVersion = '1.5'
         junitVersion = '4.12'
+        espressoVersion = '2.2.2'
     }
     repositories {
         jcenter()
     }
     dependencies {
         classpath "com.android.tools.build:gradle:$rootProject.ext.gradleVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$rootProject.ext.kotlinVersion"
         classpath "org.ajoberstar:gradle-git:$rootProject.ext.gradleGitVersion"
 
         // NOTE: Do not place your application dependencies here; they belong
