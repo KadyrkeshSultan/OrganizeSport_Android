@@ -20,6 +20,7 @@ android:
  - addon-google_apis-google-19 # google play services
 
 # Script
-# 'connectedCheck' executes instrumentation tests located in /src/androidTests/
+# 'connectedCheck' executes instrumentation tests located in /src/androidTest/
+# 'test' executes instrumentation tests located in /src/test/
 script:
-- ./gradlew clean build connectedCheck -PdisablePreDex --stacktrace
+- ./gradlew clean build test -PdisablePreDex --stacktrace
