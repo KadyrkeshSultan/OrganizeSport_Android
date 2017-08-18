@@ -13,7 +13,7 @@ buildscript {
         gradleVersion = '2.3.3'
         gradleGitVersion = '1.7.2'
         kotlinVersion = '1.1.4'
-
+        googleServicesVersion = '3.1.0'
 
         // App dependencies
         leakcanaryVersion = '1.5'
@@ -27,6 +27,7 @@ buildscript {
         classpath "com.android.tools.build:gradle:$rootProject.ext.gradleVersion"
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$rootProject.ext.kotlinVersion"
         classpath "org.ajoberstar:gradle-git:$rootProject.ext.gradleGitVersion"
+        classpath "com.google.gms:google-services:$rootProject.ext.googleServicesVersion"
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

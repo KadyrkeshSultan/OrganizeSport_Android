@@ -94,9 +94,14 @@ dependencies {
     })
     compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
     compile "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.ext.kotlinVersion"
     // Some more Material Design explicit dependencies
     compile "com.android.support:design:$rootProject.ext.supportLibraryVersion"
     compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
     // Required -- JUnit 4 framework
     testCompile "junit:junit:$rootProject.ext.junitVersion"
+    // Optional -- LeakCanary
+    debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.leakcanaryVersion"
 }
+
+apply plugin: 'com.google.gms.google-services'
