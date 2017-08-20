@@ -84,6 +84,8 @@ android {
     // actually created this directory, so we will create it ourselves later in this article
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
 }
 
@@ -98,8 +100,13 @@ dependencies {
     // Some more Material Design explicit dependencies
     compile "com.android.support:design:$rootProject.ext.supportLibraryVersion"
     compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
-    // Required -- JUnit 4 framework
+    // Including 'RxJava' and 'RxKotlin'
+    compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJavaVersion"
+    compile "io.reactivex.rxjava2:rxkotlin:$rootProject.ext.rxKotlinVersion"
+    // Required -- JUnit 4 framework and Kotlin for testing
     testCompile "junit:junit:$rootProject.ext.junitVersion"
+    testCompile "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.ext.kotlinVersion"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$rootProject.ext.kotlinVersion"
     // Optional -- LeakCanary
     debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.leakcanaryVersion"
 }

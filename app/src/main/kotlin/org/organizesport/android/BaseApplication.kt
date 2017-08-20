@@ -5,7 +5,12 @@ import android.util.Log
 import com.squareup.leakcanary.LeakCanary
 
 /**
- * Created by psor1i on 16-Aug-17.
+ * This class extends from {@link Application} and enables 'LeakCanary'. This library detects memory
+ * leaks for Android, automatically showing a notification when an Activity memory leak is detected
+ * in a debug build.
+ *
+ * @author psor1i
+ * @since 1.0
  */
 class BaseApplication : Application() {
 
