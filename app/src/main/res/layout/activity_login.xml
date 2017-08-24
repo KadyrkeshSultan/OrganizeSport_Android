@@ -5,15 +5,88 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@android:color/white"
     tools:context=".view.activities.LoginActivity">
 
     <TextView
-        android:id="@+id/tv_place_holder_activity_login"
+        android:id="@+id/tv_title_activity_login"
+        style="?android:attr/textAppearanceLarge"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/tv_activity_login_place_holder_text"
+        android:layout_marginBottom="@dimen/base_dimen_16"
+        android:text="@string/tv_login_text"
+        app:layout_constraintBottom_toTopOf="@+id/et_email_activity_login"
+        app:layout_constraintLeft_toLeftOf="@+id/et_password_activity_login"
+        app:layout_constraintRight_toRightOf="@+id/et_password_activity_login"/>
+
+    <EditText
+        android:id="@+id/et_email_activity_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/base_dimen_8"
+        android:ems="10"
+        android:hint="@string/et_email_text"
+        android:inputType="textPersonName"
+        app:layout_constraintBottom_toTopOf="@+id/et_password_activity_login"
+        app:layout_constraintLeft_toLeftOf="@+id/et_password_activity_login"
+        app:layout_constraintRight_toRightOf="@+id/et_password_activity_login"/>
+
+    <EditText
+        android:id="@+id/et_password_activity_login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="@string/et_password_text"
+        android:inputType="textPassword"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"/>
+
+    <Button
+        android:id="@+id/btn_login_activity_login"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/base_dimen_32"
+        android:layout_marginRight="@dimen/base_dimen_32"
+        android:background="@drawable/btn_default_selector"
+        android:text="@string/btn_login_text"
+        android:textAllCaps="false"
+        android:textColor="@android:color/darker_gray"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tb_access_mode_status_activity_login"
+        app:layout_constraintRight_toLeftOf="@+id/tb_access_mode_status_activity_login"/>
+
+    <Button
+        android:id="@+id/btn_register_activity_login"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/base_dimen_32"
+        android:layout_marginStart="@dimen/base_dimen_32"
+        android:background="@drawable/btn_default_selector"
+        android:text="@string/btn_register_text"
+        android:textAllCaps="false"
+        android:textColor="@android:color/darker_gray"
+        android:visibility="invisible"
+        app:layout_constraintBaseline_toBaselineOf="@+id/tb_access_mode_status_activity_login"
+        app:layout_constraintLeft_toRightOf="@+id/tb_access_mode_status_activity_login"/>
+
+    <ToggleButton
+        android:id="@+id/tb_access_mode_status_activity_login"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="8dp"
+        android:background="@null"
+        android:text="@string/btn_register_text"
+        android:textAllCaps="false"
+        android:textColor="@android:color/holo_blue_dark"
+        android:textOn="@string/btn_login_text"
+        android:textOff="@string/btn_register_text"
+        app:layout_constraintLeft_toLeftOf="@+id/et_password_activity_login"
+        app:layout_constraintRight_toRightOf="@+id/et_password_activity_login"
+        app:layout_constraintTop_toBottomOf="@+id/et_password_activity_login"/>
 </android.support.constraint.ConstraintLayout>
