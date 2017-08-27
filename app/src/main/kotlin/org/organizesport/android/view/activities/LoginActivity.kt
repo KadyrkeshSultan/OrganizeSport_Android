@@ -19,6 +19,15 @@ import org.organizesport.android.LoginContract
 import org.organizesport.android.R
 import org.organizesport.android.presenter.LoginActivityPresenter
 
+/**
+ * This class refers to the 'LoginActivity' View, following the MVP architectural pattern.
+ *
+ * The 'LoginContract.View' interface provides associated methods for communication with the
+ * Presenter only
+ *
+ * @author psor1i
+ * @since 1.0
+ */
 class LoginActivity : AppCompatActivity(), LoginContract.View {
 
     private val TAG = LoginActivity::class.java.simpleName

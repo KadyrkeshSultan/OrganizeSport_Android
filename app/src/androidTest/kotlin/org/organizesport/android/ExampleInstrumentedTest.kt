@@ -1,6 +1,5 @@
-package org.organizesport.android.organizesport_android
+package org.organizesport.android
 
-import android.content.Context
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
 
