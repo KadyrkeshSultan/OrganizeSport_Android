@@ -1,6 +1,9 @@
 package org.organizesport.android.presenter
 
 import org.organizesport.android.LoginContract
+import org.organizesport.android.view.activities.SampleActivity
+
+import ru.terrakok.cicerone.Router
 
 /**
  * This class refers to the presenter attached to the {@link LoginActivity} view and related
@@ -9,9 +12,10 @@ import org.organizesport.android.LoginContract
  * @author psor1i
  * @since 1.0
  */
-class LoginActivityPresenter(var view: LoginContract.View?) : LoginContract.Presenter {
-
-    private val TAG: String = LoginActivityPresenter::class.java.simpleName
+class LoginActivityPresenter(private var view: LoginContract.View?, private val router: Router) : LoginContract.Presenter {
+    companion object {
+        private val TAG: String = "LoginActivityPresenter"
+    }
 
     private enum class LoginStatus {
         LOGIN, REGISTER;
@@ -23,7 +27,6 @@ class LoginActivityPresenter(var view: LoginContract.View?) : LoginContract.Pres
             })
         }
     }
-
     private var loginStatus: LoginStatus = LoginStatus.LOGIN
 
     override fun registerClicked() {
@@ -31,7 +34,6 @@ class LoginActivityPresenter(var view: LoginContract.View?) : LoginContract.Pres
     }
 
     override fun accessModeStatusClicked() {
-//        loginStatus.toggle()
         loginStatus = loginStatus.toggle()
         when (loginStatus) {
             LoginStatus.LOGIN -> view?.showLoginUi()
@@ -48,7 +50,7 @@ class LoginActivityPresenter(var view: LoginContract.View?) : LoginContract.Pres
     }
 
     override fun loginClicked() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        router.navigateTo(SampleActivity.TAG)
     }
 
     override fun onDestroy() {

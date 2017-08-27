@@ -1,5 +1,6 @@
 package org.organizesport.android.view.activities
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -15,9 +16,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_login.*
 
 import org.jetbrains.anko.toast
+import org.organizesport.android.BaseApplication
 import org.organizesport.android.LoginContract
 import org.organizesport.android.R
 import org.organizesport.android.presenter.LoginActivityPresenter
+import ru.terrakok.cicerone.Navigator
+
+import ru.terrakok.cicerone.commands.*
 
 /**
  * This class refers to the 'LoginActivity' View, following the MVP architectural pattern.
@@ -30,9 +35,26 @@ import org.organizesport.android.presenter.LoginActivityPresenter
  */
 class LoginActivity : AppCompatActivity(), LoginContract.View {
 
-    private val TAG = LoginActivity::class.java.simpleName
+    companion object {
+        val TAG = "LoginActivity"
+    }
+
     // Reference to an interface, so that polymorphism is used later
-    private var presenter: LoginContract.Presenter? = LoginActivityPresenter(this)
+    private var presenter: LoginContract.Presenter? = null
+    private val navigator = object : Navigator {
+        override fun applyCommand(command: Command) {
+            if (command is Forward) {
+                forward(command)
+            }
+        }
+
+        private fun forward(command: Forward) {
+            when (command.screenKey) {
+                SampleActivity.TAG -> startActivity(Intent(this@LoginActivity, SampleActivity::class.java))
+                else -> Log.e("Cicerone", "Unknown screen: " + command.screenKey)
+            }
+        }
+    }
     private var tvTitle: TextView? = null
     private var btnLogin: Button? = null
     private var btnRegister: Button? = null
@@ -42,11 +64,16 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        presenter = LoginActivityPresenter(this, BaseApplication.INSTANCE.cicerone.router)
+
         // Using Kotlin extensions for View binding
         tvTitle = tv_title_activity_login
 
         btnLogin = btn_login_activity_login
-        btnLogin?.addClickAction({ toast("Login clicked") })
+        btnLogin?.addClickAction({
+            toast("Login clicked")
+            presenter?.loginClicked()
+        })
 
         tbAccessModeStatus = tb_access_mode_status_activity_login
         tbAccessModeStatus?.addClickAction({
@@ -56,6 +83,16 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
 
         btnRegister = btn_register_activity_login
         btnRegister?.addClickAction({ toast("Register clicked") })
+    }
+
+    override fun onResume() {
+        super.onResume()
+        BaseApplication.INSTANCE.cicerone.navigatorHolder.setNavigator(this.navigator)
+    }
+
+    override fun onPause() {
+        super.onPause()
+        BaseApplication.INSTANCE.cicerone.navigatorHolder.removeNavigator()
     }
 
     fun Button.addClickAction(f: () -> Unit): Unit {

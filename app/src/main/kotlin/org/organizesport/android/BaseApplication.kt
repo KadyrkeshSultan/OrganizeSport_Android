@@ -3,21 +3,36 @@ package org.organizesport.android
 import android.app.Application
 import android.util.Log
 import com.squareup.leakcanary.LeakCanary
+import ru.terrakok.cicerone.Cicerone
+import ru.terrakok.cicerone.NavigatorHolder
+import ru.terrakok.cicerone.Router
 
 /**
- * This class extends from {@link Application} and enables 'LeakCanary'. This library detects memory
+ * This class extends from {@link Application}.
+ *
+ * It enables 'LeakCanary'. This library detects memory
  * leaks for Android, automatically showing a notification when an Activity memory leak is detected
  * in a debug build.
+ *
+ * It also makes use of 'Cicerone', a library which
  *
  * @author psor1i
  * @since 1.0
  */
 class BaseApplication : Application() {
 
-    private val TAG: String? = javaClass.simpleName
+    companion object {
+        private val TAG = "BaseApplication"
+        lateinit var INSTANCE: BaseApplication
+    }
+
+    lateinit var cicerone: Cicerone<Router>
 
     override fun onCreate() {
         super.onCreate()
+        INSTANCE = this
+
+        this.initCicerone()
 
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
@@ -30,4 +45,7 @@ class BaseApplication : Application() {
         // Normal app init code...
     }
 
+    private fun BaseApplication.initCicerone(): Unit {
+        this.cicerone = Cicerone.create()
+    }
 }

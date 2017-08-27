@@ -112,7 +112,9 @@ dependencies {
     // Including 'RxJava' and 'RxKotlin'
     compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJavaVersion"
     compile "io.reactivex.rxjava2:rxkotlin:$rootProject.ext.rxKotlinVersion"
+    // Including 3rd party libraries (RxBinding, and Cicerone)
     compile "com.jakewharton.rxbinding2:rxbinding-kotlin:$rootProject.ext.rxBindingVersion"
+    compile "ru.terrakok.cicerone:cicerone:$rootProject.ext.ciceroneVersion"
     // Required -- JUnit 4 framework and Kotlin for testing
     testCompile "junit:junit:$rootProject.ext.junitVersion"
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.ext.kotlinVersion"
