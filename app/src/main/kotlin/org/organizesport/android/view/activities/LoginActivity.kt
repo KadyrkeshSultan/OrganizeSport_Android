@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import android.widget.ToggleButton
 
@@ -34,54 +35,48 @@ import ru.terrakok.cicerone.commands.*
  * @since 1.0
  */
 class LoginActivity : AppCompatActivity(), LoginContract.View {
-
     companion object {
         val TAG = "LoginActivity"
     }
 
     // Reference to an interface, so that polymorphism is used later
     private var presenter: LoginContract.Presenter? = null
-    private val navigator = object : Navigator {
-        override fun applyCommand(command: Command) {
-            if (command is Forward) {
-                forward(command)
+    private val navigator: Navigator? by lazy {
+        object : Navigator {
+            override fun applyCommand(command: Command) {
+                if (command is Forward) {
+                    forward(command)
+                }
             }
-        }
 
-        private fun forward(command: Forward) {
-            when (command.screenKey) {
-                SampleActivity.TAG -> startActivity(Intent(this@LoginActivity, SampleActivity::class.java))
-                else -> Log.e("Cicerone", "Unknown screen: " + command.screenKey)
+            private fun forward(command: Forward) {
+                when (command.screenKey) {
+                    SampleActivity.TAG -> startActivity(Intent(this@LoginActivity, SampleActivity::class.java))
+                    else -> Log.e("Cicerone", "Unknown screen: " + command.screenKey)
+                }
             }
         }
     }
-    private var tvTitle: TextView? = null
-    private var btnLogin: Button? = null
-    private var btnRegister: Button? = null
-    private var tbAccessModeStatus: ToggleButton? = null
+    private val tvTitle: TextView? by lazy { tv_title_activity_login }
+    private val etEmail: EditText? by lazy { et_email_activity_login }
+    private val etPassword: EditText? by lazy { et_password_activity_login }
+    private val btnLogin: Button? by lazy { btn_login_activity_login }
+    private val btnRegister: Button? by lazy { btn_register_activity_login }
+    private val tbAccessModeStatus: ToggleButton? by lazy { tb_access_mode_status_activity_login }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        presenter = LoginActivityPresenter(this, BaseApplication.INSTANCE.cicerone.router)
+        presenter = LoginActivityPresenter(this,
+                BaseApplication.INSTANCE.cicerone.router)
 
-        // Using Kotlin extensions for View binding
-        tvTitle = tv_title_activity_login
-
-        btnLogin = btn_login_activity_login
         btnLogin?.addClickAction({
-            toast("Login clicked")
-            presenter?.loginClicked()
+            presenter?.loginClicked(etEmail?.text.toString(), etPassword?.text.toString())
         })
-
-        tbAccessModeStatus = tb_access_mode_status_activity_login
         tbAccessModeStatus?.addClickAction({
-            Log.d(TAG, "Mode toggled")
             presenter?.accessModeStatusClicked()
         })
-
-        btnRegister = btn_register_activity_login
         btnRegister?.addClickAction({ toast("Register clicked") })
     }
 
@@ -95,7 +90,10 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         BaseApplication.INSTANCE.cicerone.navigatorHolder.removeNavigator()
     }
 
-    fun Button.addClickAction(f: () -> Unit): Unit {
+    /**
+     *
+     */
+    private fun Button.addClickAction(f: () -> Unit): Unit {
         this.clicks()
                 .observeOn(AndroidSchedulers.mainThread())   // subscribers post on the UI thread
                 .subscribe { f() }
@@ -115,8 +113,16 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         btnLogin?.visibility = View.INVISIBLE
     }
 
+    override fun showLoginSuccessful() {
+        toast("Login successful")
+    }
+
+    override fun showLoginError() {
+        toast("Login error")
+    }
+
     override fun accessApplication() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+//        presenter?.accessModeStatusClicked()
     }
 
     override fun onDestroy() {

@@ -109,6 +109,8 @@ dependencies {
     // Some more Material Design explicit dependencies
     compile "com.android.support:design:$rootProject.ext.supportLibraryVersion"
     compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
+    // Including Firebase authentication API
+    compile 'com.google.firebase:firebase-auth:10.0.1'
     // Including 'RxJava' and 'RxKotlin'
     compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJavaVersion"
     compile "io.reactivex.rxjava2:rxkotlin:$rootProject.ext.rxKotlinVersion"

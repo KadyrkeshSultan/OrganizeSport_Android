@@ -12,7 +12,7 @@ buildscript {
         constraintLayoutVersion = '1.0.2'
         gradleVersion = '2.3.3'
         gradleGitVersion = '1.7.2'
-        kotlinVersion = '1.1.4-2'
+        kotlinVersion = '1.1.4-3'
         ankoVersion = '0.10.1'
         dokkaVersion = '0.9.15'
 

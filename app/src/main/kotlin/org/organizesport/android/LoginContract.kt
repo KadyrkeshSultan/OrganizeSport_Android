@@ -1,5 +1,7 @@
 package org.organizesport.android
 
+import org.organizesport.android.presenter.LoginActivityPresenter
+
 /**
  * Contract interfaces for 'View' and 'Presenter' regarding {@link LoginActivity}
  *
@@ -11,17 +13,21 @@ interface LoginContract {
         fun showLoginUi()
         fun showRegisterUi()
         fun accessApplication()
+        fun showLoginSuccessful()
+        fun showLoginError()
     }
 
     interface Presenter {
         // User actions
-        fun loginClicked()
+        fun loginClicked(email: String, password: String)
         fun registerClicked()
         fun accessModeStatusClicked()
         fun startActivityClicked()
         // Model updates
         fun viewAboutToGetClosed()
-
+        fun loginSuccessful()
+        fun loginError()
+        fun loginFailure()
         fun onDestroy()
     }
 
@@ -29,12 +35,11 @@ interface LoginContract {
         fun login(email: String, password: String)
         fun register(email: String, password: String)
     }
-    interface
-    InteractorOutput {
+
+    interface InteractorOutput {
         fun onLoginSuccess()
         fun onLoginError()
     }
-
 
     interface Model {
     }
