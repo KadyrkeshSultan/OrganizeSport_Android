@@ -31,7 +31,7 @@ import ru.terrakok.cicerone.commands.*
  * The 'LoginContract.View' interface provides associated methods for communication with the
  * Presenter only
  *
- * @author psor1i
+ * @author pablol.
  * @since 1.0
  */
 class LoginActivity : AppCompatActivity(), LoginContract.View {
@@ -113,12 +113,8 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         btnLogin?.visibility = View.INVISIBLE
     }
 
-    override fun showLoginSuccessful() {
-        toast("Login successful")
-    }
-
-    override fun showLoginError() {
-        toast("Login error")
+    override fun showInfoMessage(msg: String) {
+        toast(msg)
     }
 
     override fun accessApplication() {

@@ -16,7 +16,7 @@ import ru.terrakok.cicerone.Router
  *
  * It also makes use of 'Cicerone', a library which
  *
- * @author psor1i
+ * @author pablol.
  * @since 1.0
  */
 class BaseApplication : Application() {

@@ -13,14 +13,13 @@ interface LoginContract {
         fun showLoginUi()
         fun showRegisterUi()
         fun accessApplication()
-        fun showLoginSuccessful()
-        fun showLoginError()
+        fun showInfoMessage(msg: String)
     }
 
     interface Presenter {
         // User actions
         fun loginClicked(email: String, password: String)
-        fun registerClicked()
+        fun registerClicked(email: String, password: String)
         fun accessModeStatusClicked()
         fun startActivityClicked()
         // Model updates

@@ -34,27 +34,19 @@ class LoginActivityPresenter(private var view: LoginContract.View?,
     private var loginStatus: LoginStatus = LoginStatus.LOGIN
     private val interactor: LoginContract.Interactor by lazy { LoginActivityInteractor(this) }
 
-    override fun buttonClicked(email: String, password: String, f: () -> Unit) {
-        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
-            interactor?.login(email, password)
-        } else {
-            f()
-        }
-    }
-
     override fun loginClicked(email: String, password: String) {
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
-            interactor?.login(email, password)
+            interactor.login(email, password)
         } else {
-            view?.showLoginError()
+            view?.showInfoMessage("Login error")
         }
     }
 
-    override fun registerClicked(email: String, password: String) { {
+    override fun registerClicked(email: String, password: String) {
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
-            interactor?.login(email, password)
+            interactor.register(email, password)
         } else {
-            view?.showLoginError()
+            view?.showInfoMessage("Register error")
         }
     }
 
@@ -76,16 +68,16 @@ class LoginActivityPresenter(private var view: LoginContract.View?,
     }
 
     override fun loginSuccessful() {
-        view?.showLoginSuccessful()
+        view?.showInfoMessage("Login successful")
         router.navigateTo(SampleActivity.TAG)
     }
 
     override fun loginError() {
-        view?.showLoginError()
+        view?.showInfoMessage("Login error")
     }
 
     override fun loginFailure() {
-        view?.showLoginError()
+        view?.showInfoMessage("Login failed")
     }
 
     override fun onDestroy() {
