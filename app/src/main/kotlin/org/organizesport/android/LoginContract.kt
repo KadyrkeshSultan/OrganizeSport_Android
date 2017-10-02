@@ -28,6 +28,8 @@ interface LoginContract {
         fun viewAboutToGetClosed()
         fun loginSuccessful()
         fun loginError()
+        fun registerSuccessful()
+        fun registerError()
         fun noNetworkAccess()
         fun onDestroy()
     }

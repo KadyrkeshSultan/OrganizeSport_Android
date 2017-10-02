@@ -13,8 +13,11 @@ import android.support.test.runner.AndroidJUnit4
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-import org.organizesport.android.R
 import org.organizesport.android.view.activities.LoginActivity
+import android.support.test.espresso.matcher.RootMatchers.withDecorView
+import org.hamcrest.CoreMatchers.`is`
+import org.hamcrest.CoreMatchers.not
+
 
 /**
  * This class relates to the instrumentation tests of the 'LoginActivity' View (UI tests).
@@ -27,7 +30,7 @@ class LoginActivityInstrumentedTest {
 
     @Rule
     @JvmField
-    val activity = ActivityTestRule<LoginActivity>(LoginActivity::class.java)
+    val activityTestRule = ActivityTestRule<LoginActivity>(LoginActivity::class.java)
 
     @Test
     fun testEditTextInsertion() {
@@ -50,5 +53,37 @@ class LoginActivityInstrumentedTest {
         onView(withId(R.id.tv_title_activity_login)).check(matches(withText("Register")))
         onView(withId(R.id.btn_login_activity_login)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.INVISIBLE)))
         onView(withId(R.id.btn_register_activity_login)).check(matches(withEffectiveVisibility(ViewMatchers.Visibility.VISIBLE)))
+    }
+
+    @Test
+    fun testUserLoginSuccesful() {
+        val expectedEmail = "mytest@mytest.com"
+        val expectedPassword = "mytest"
+
+        onView(withId(R.id.et_email_activity_login)).perform(typeText(expectedEmail))
+        closeSoftKeyboard()
+        onView(withId(R.id.et_password_activity_login)).perform(typeText(expectedPassword))
+        closeSoftKeyboard()
+        onView(withId(R.id.btn_login_activity_login)).perform(click())
+
+        onView(withText("Login successful"))
+                .inRoot(withDecorView(not(`is`(activityTestRule.activity.window.decorView))))
+                .check(matches(isDisplayed()))
+    }
+
+    @Test
+    fun testUserLoginFailure() {
+        val expectedEmail = "notvaliduser@mytest.com"
+        val expectedPassword = "notvalidpassword"
+
+        onView(withId(R.id.et_email_activity_login)).perform(typeText(expectedEmail))
+        closeSoftKeyboard()
+        onView(withId(R.id.et_password_activity_login)).perform(typeText(expectedPassword))
+        closeSoftKeyboard()
+        onView(withId(R.id.btn_login_activity_login)).perform(click())
+
+        onView(withText("Login error"))
+                .inRoot(withDecorView(not(`is`(activityTestRule.activity.window.decorView))))
+                .check(matches(isDisplayed()))
     }
 }

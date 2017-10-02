@@ -78,7 +78,9 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         tbAccessModeStatus?.addClickAction({
             presenter?.accessModeStatusClicked()
         })
-        btnRegister?.addClickAction({ toast("Register clicked") })
+        btnRegister?.addClickAction({
+            presenter?.registerClicked(etEmail?.text.toString(), etPassword?.text.toString())
+        })
     }
 
     override fun onResume() {

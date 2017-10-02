@@ -78,6 +78,17 @@ class LoginActivityPresenter(private var view: LoginContract.View?,
         view?.showInfoMessage("Login error")
     }
 
+    override fun registerSuccessful() {
+        view?.hideLoading()
+        view?.showInfoMessage("Register successful")
+        router.navigateTo(SampleActivity.TAG)
+    }
+
+    override fun registerError() {
+        view?.hideLoading()
+        view?.showInfoMessage("Register error")
+    }
+
     override fun noNetworkAccess() {
         view?.hideLoading()
         view?.showInfoMessage("No network access")

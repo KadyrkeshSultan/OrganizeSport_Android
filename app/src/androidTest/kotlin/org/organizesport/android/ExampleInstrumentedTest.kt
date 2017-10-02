@@ -21,6 +21,6 @@ class ExampleInstrumentedTest {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
 
-        assertEquals("org.organizesport.android", appContext.packageName)
+        assert(appContext.packageName.matches(Regex("org.organizesport.android")))
     }
 }

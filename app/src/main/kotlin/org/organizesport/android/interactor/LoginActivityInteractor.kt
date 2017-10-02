@@ -22,6 +22,7 @@ class LoginActivityInteractor(private val presenter: LoginActivityPresenter?): L
     companion object {
         private val TAG: String = "LoginActivityInteractor"
     }
+
     @Inject
     lateinit var context: Context
     private val auth: FirebaseAuth? by lazy { FirebaseAuth.getInstance() }
@@ -47,7 +48,17 @@ class LoginActivityInteractor(private val presenter: LoginActivityPresenter?): L
     }
 
     override fun register(email: String, password: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        if (isNetworkConnected(context)) {
+            auth?.createUserWithEmailAndPassword(email, password)
+                    ?.addOnCompleteListener { task: Task<AuthResult> ->
+                        if (task.isSuccessful) {
+                            presenter?.registerSuccessful()
+                        } else {
+                            presenter?.registerError()
+                        }
+                    }
+        } else {
+            presenter?.noNetworkAccess()
+        }
     }
-
 }
