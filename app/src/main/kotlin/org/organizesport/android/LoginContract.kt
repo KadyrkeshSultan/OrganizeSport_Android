@@ -12,6 +12,8 @@ interface LoginContract {
     interface View {
         fun showLoginUi()
         fun showRegisterUi()
+        fun showLoading()
+        fun hideLoading()
         fun accessApplication()
         fun showInfoMessage(msg: String)
     }
@@ -26,7 +28,7 @@ interface LoginContract {
         fun viewAboutToGetClosed()
         fun loginSuccessful()
         fun loginError()
-        fun loginFailure()
+        fun noNetworkAccess()
         fun onDestroy()
     }
 

@@ -11,12 +11,11 @@ import ru.terrakok.cicerone.Router
  * This class refers to the presenter attached to the {@link LoginActivity} view and related
  * entities.
  *
- * @author psor1i
+ * @author pablol.
  * @since 1.0
  */
 class LoginActivityPresenter(private var view: LoginContract.View?,
                              private val router: Router) : LoginContract.Presenter {
-
     companion object {
         private val TAG: String = "LoginActivityPresenter"
     }
@@ -36,9 +35,10 @@ class LoginActivityPresenter(private var view: LoginContract.View?,
 
     override fun loginClicked(email: String, password: String) {
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
+            view?.showLoading()
             interactor.login(email, password)
         } else {
-            view?.showInfoMessage("Login error")
+            view?.showInfoMessage("Text fields cannot be empty")
         }
     }
 
@@ -68,16 +68,19 @@ class LoginActivityPresenter(private var view: LoginContract.View?,
     }
 
     override fun loginSuccessful() {
+        view?.hideLoading()
         view?.showInfoMessage("Login successful")
         router.navigateTo(SampleActivity.TAG)
     }
 
     override fun loginError() {
+        view?.hideLoading()
         view?.showInfoMessage("Login error")
     }
 
-    override fun loginFailure() {
-        view?.showInfoMessage("Login failed")
+    override fun noNetworkAccess() {
+        view?.hideLoading()
+        view?.showInfoMessage("No network access")
     }
 
     override fun onDestroy() {
