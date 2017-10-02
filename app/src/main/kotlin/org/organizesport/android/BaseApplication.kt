@@ -7,7 +7,6 @@ import org.organizesport.android.di.DaggerModelComponent
 import org.organizesport.android.di.ModelComponent
 import org.organizesport.android.di.ModelModule
 import ru.terrakok.cicerone.Cicerone
-import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 
 /**
@@ -29,7 +28,9 @@ class BaseApplication : Application() {
         lateinit var INSTANCE: BaseApplication
     }
 
+    // Routing layer (VIPER)
     lateinit var cicerone: Cicerone<Router>
+    // Dagger2 component
     private val component: ModelComponent by lazy {
         DaggerModelComponent
                 .builder()

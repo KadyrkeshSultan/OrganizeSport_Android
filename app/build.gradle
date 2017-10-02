@@ -112,7 +112,9 @@ dependencies {
     compile "com.android.support:design:$rootProject.ext.supportLibraryVersion"
     compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
     // Including Firebase authentication API
-    compile 'com.google.firebase:firebase-auth:10.0.1'
+    compile "com.google.firebase:firebase-core:$rootProject.ext.firebaseVersion"
+    compile "com.google.firebase:firebase-auth:$rootProject.ext.firebaseVersion"
+    compile "com.google.firebase:firebase-database:$rootProject.ext.firebaseVersion"
     // Including RxJava and RxKotlin
     compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJavaVersion"
     compile "io.reactivex.rxjava2:rxkotlin:$rootProject.ext.rxKotlinVersion"
@@ -128,6 +130,8 @@ dependencies {
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$rootProject.ext.kotlinVersion"
     // Optional -- LeakCanary
     debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.leakcanaryVersion"
+    // No-Op version of LeakCanary for release builds: no notifications, no analysis,...
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.leakcanaryVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'
