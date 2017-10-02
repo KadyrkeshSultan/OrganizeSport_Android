@@ -1,6 +1,5 @@
-package org.organizesport.android.organizesport_android
+package org.organizesport.android
 
-import android.content.Context
 import android.support.test.InstrumentationRegistry
 import android.support.test.runner.AndroidJUnit4
 
@@ -22,6 +21,6 @@ class ExampleInstrumentedTest {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
 
-        assertEquals("org.organizesport.android", appContext.packageName)
+        assert(appContext.packageName.matches(Regex("org.organizesport.android")))
     }
 }
