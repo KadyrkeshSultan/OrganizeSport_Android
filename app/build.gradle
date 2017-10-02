@@ -2,9 +2,11 @@ apply plugin: 'com.android.application'
 // Applies the Kotlin Android plugin
 apply plugin: 'kotlin-android'
 // Applies Kotlin extensions plugin
-apply plugin: 'kotlin-android-extensions'   // Allows to import 'View' objects
+apply plugin: 'kotlin-android-extensions'   // Allows to import 'View' objects (no more findViewB...)
 // Applies Kotlin documentation plugin
 apply plugin: 'org.jetbrains.dokka'
+// Applies Kotlin Annotation Processing Tool (for Dagger2)
+apply plugin: 'kotlin-kapt'
 
 // Gets current date in a specific format (e.g.: #Tue Apr 18 09:36:31 CEST 2017)
 def getDate() {
@@ -111,12 +113,15 @@ dependencies {
     compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
     // Including Firebase authentication API
     compile 'com.google.firebase:firebase-auth:10.0.1'
-    // Including 'RxJava' and 'RxKotlin'
+    // Including RxJava and RxKotlin
     compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJavaVersion"
     compile "io.reactivex.rxjava2:rxkotlin:$rootProject.ext.rxKotlinVersion"
     // Including 3rd party libraries (RxBinding, and Cicerone)
     compile "com.jakewharton.rxbinding2:rxbinding-kotlin:$rootProject.ext.rxBindingVersion"
     compile "ru.terrakok.cicerone:cicerone:$rootProject.ext.ciceroneVersion"
+    // Including Dagger 2
+    kapt "com.google.dagger:dagger-compiler:$rootProject.ext.dagger2Version"
+    compile "com.google.dagger:dagger:$rootProject.ext.dagger2Version"
     // Required -- JUnit 4 framework and Kotlin for testing
     testCompile "junit:junit:$rootProject.ext.junitVersion"
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.ext.kotlinVersion"
