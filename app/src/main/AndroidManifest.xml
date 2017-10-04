@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="org.organizesport.android.view.activities.LoginActivity">
+            android:name=".view.activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
@@ -22,6 +22,8 @@
         </activity>
         <activity
             android:name=".view.activities.SampleActivity"/>
+        <activity
+            android:name=".view.activities.SportsListActivity"/>
     </application>
 
 </manifest>
