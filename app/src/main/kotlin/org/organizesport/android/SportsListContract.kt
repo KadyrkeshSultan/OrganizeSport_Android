@@ -27,5 +27,6 @@ interface SportsListContract {
 
     interface InteractorOutput {
         fun onDataFetched(list: MutableList<String>)
+        fun onDataError()
     }
 }

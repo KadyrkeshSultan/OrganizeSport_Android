@@ -1,9 +1,11 @@
 package org.organizesport.android.presenter
 
 import android.text.TextUtils
+import org.organizesport.android.BaseApplication
 import org.organizesport.android.LoginContract
 import org.organizesport.android.interactor.LoginActivityInteractor
 import org.organizesport.android.view.activities.SampleActivity
+import org.organizesport.android.view.activities.SportsListActivity
 
 import ru.terrakok.cicerone.Router
 
@@ -14,8 +16,8 @@ import ru.terrakok.cicerone.Router
  * @author pablol.
  * @since 1.0
  */
-class LoginActivityPresenter(private var view: LoginContract.View?,
-                             private val router: Router) : LoginContract.Presenter {
+class LoginActivityPresenter(private var view: LoginContract.View?) : LoginContract.Presenter, LoginContract.InteractorOutput {
+
     companion object {
         private val TAG: String = "LoginActivityPresenter"
     }
@@ -31,12 +33,13 @@ class LoginActivityPresenter(private var view: LoginContract.View?,
         }
     }
     private var loginStatus: LoginStatus = LoginStatus.LOGIN
-    private val interactor: LoginContract.Interactor by lazy { LoginActivityInteractor(this) }
+    private var interactor: LoginContract.Interactor? = LoginActivityInteractor(this)
+    private val router: Router? by lazy { BaseApplication.INSTANCE.cicerone.router }
 
     override fun loginClicked(email: String, password: String) {
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
             view?.showLoading()
-            interactor.login(email, password)
+            interactor?.login(email, password)
         } else {
             view?.showInfoMessage("Text fields cannot be empty")
         }
@@ -44,7 +47,7 @@ class LoginActivityPresenter(private var view: LoginContract.View?,
 
     override fun registerClicked(email: String, password: String) {
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
-            interactor.register(email, password)
+            interactor?.register(email, password)
         } else {
             view?.showInfoMessage("Register error")
         }
@@ -58,35 +61,15 @@ class LoginActivityPresenter(private var view: LoginContract.View?,
         }
     }
 
-    override fun startActivityClicked() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-
-    override fun viewAboutToGetClosed() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun loginSuccessful() {
-        view?.hideLoading()
-        view?.showInfoMessage("Login successful")
-        router.navigateTo(SampleActivity.TAG)
-    }
-
-    override fun loginError() {
-        view?.hideLoading()
-        view?.showInfoMessage("Login error")
-    }
-
-    override fun registerSuccessful() {
-        view?.hideLoading()
-        view?.showInfoMessage("Register successful")
-        router.navigateTo(SampleActivity.TAG)
-    }
-
-    override fun registerError() {
+    override fun onRegisterError() {
         view?.hideLoading()
         view?.showInfoMessage("Register error")
+    }
+
+    override fun onRegisterSuccess() {
+        view?.hideLoading()
+        view?.showInfoMessage("Register successful")
+        router?.navigateTo(SampleActivity.TAG)
     }
 
     override fun noNetworkAccess() {
@@ -94,9 +77,18 @@ class LoginActivityPresenter(private var view: LoginContract.View?,
         view?.showInfoMessage("No network access")
     }
 
+    override fun onLoginSuccess() {
+        view?.hideLoading()
+        router?.navigateTo(SportsListActivity.TAG)
+    }
+
+    override fun onLoginError() {
+        view?.hideLoading()
+        view?.showInfoMessage("Login error")
+    }
     override fun onDestroy() {
         view = null
-//        interactor?.unregister()
-//        interactor = null
+        interactor?.unregister()
+        interactor = null
     }
 }

@@ -22,16 +22,19 @@ class SportsListActivityInteractor(private var output: SportsListContract.Intera
         val sportsListListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 Log.d(TAG, "loadPost:onSuccess ${dataSnapshot.key}")
-//                menu.clear()
-//                dataSnapshot.children.mapNotNullTo(menu) { it.getValue<String>(String::class.java) }
+                val list = mutableListOf<String>()
+                dataSnapshot.children.mapNotNullTo(list) { it.value as String }
+                output?.onDataFetched(list)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w(TAG, "loadPost:onCancelled ${databaseError.toException()}")
+                output?.onDataError()
             }
         }
 
-        fbDatabase.child("sports").addListenerForSingleValueEvent(sportsListListener)
+        fbDatabase.child("sports").addValueEventListener(sportsListListener)
+//        fbDatabase.child("users").addListenerForSingleValueEvent(sportsListListener)
     }
 
     override fun unregister() {

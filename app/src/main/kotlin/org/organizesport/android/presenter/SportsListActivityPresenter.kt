@@ -16,7 +16,7 @@ class SportsListActivityPresenter(private var view: SportsListContract.View?) : 
         SportsListContract.InteractorOutput {
 
     companion object {
-        private val TAG: String = "SportsListActivityPresenter"
+        private val TAG: String = "SportsListPresenter"
     }
 
     private var interactor: SportsListContract.Interactor? = SportsListActivityInteractor(this)
@@ -32,6 +32,10 @@ class SportsListActivityPresenter(private var view: SportsListContract.View?) : 
 
     override fun onDataFetched(list: MutableList<String>) {
         view?.publishListData(list)
+    }
+
+    override fun onDataError() {
+        view?.showInfoMessage("Data error")
     }
 
     override fun onDestroy() {

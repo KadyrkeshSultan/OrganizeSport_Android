@@ -8,8 +8,6 @@ import android.view.View
 import android.widget.*
 
 import com.jakewharton.rxbinding2.view.clicks
-import com.jakewharton.rxbinding2.view.enabled
-import com.jakewharton.rxbinding2.view.visibility
 
 import io.reactivex.android.schedulers.AndroidSchedulers
 
@@ -51,7 +49,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
 
             private fun forward(command: Forward) {
                 when (command.screenKey) {
-                    SampleActivity.TAG -> startActivity(Intent(this@LoginActivity, SampleActivity::class.java))
+                    SportsListActivity.TAG -> startActivity(Intent(this@LoginActivity, SportsListActivity::class.java))
                     else -> Log.e("Cicerone", "Unknown screen: " + command.screenKey)
                 }
             }
@@ -69,8 +67,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        presenter = LoginActivityPresenter(this,
-                BaseApplication.INSTANCE.cicerone.router)
+        presenter = LoginActivityPresenter(this)
 
         btnLogin?.addClickAction({
             presenter?.loginClicked(etEmail?.text.toString(), etPassword?.text.toString())

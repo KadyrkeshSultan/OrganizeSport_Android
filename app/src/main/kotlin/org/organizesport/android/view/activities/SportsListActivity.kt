@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import com.jakewharton.rxbinding2.widget.dataChanges
 
 import kotlinx.android.synthetic.main.activity_sports_list.*
 
@@ -29,6 +30,12 @@ class SportsListActivity : AppCompatActivity(), SportsListContract.View {
 
     private var presenter: SportsListContract.Presenter? = null
     private val lvSportsList: ListView? by lazy { lv_splist_activity_sports_list }
+    private val adapter: ArrayAdapter<String>? by lazy {
+        ArrayAdapter(
+                this,
+                android.R.layout.simple_list_item_1,
+                mutableListOf("loading..."))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,13 +46,9 @@ class SportsListActivity : AppCompatActivity(), SportsListContract.View {
         lvSportsList?.setOnItemClickListener { parent, view, position, id ->
             toast("item $position clicked")
         }
-        lvSportsList?.adapter = ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1,
-                mutableListOf("zero", "one", "two", "three", "four",
-                        "five", "six", "seven", "eight", "nine",
-                        "ten", "eleven", "twelve", "thirteen", "fourteen"))
+        lvSportsList?.adapter = adapter
 
-        presenter.
+        presenter?.loadSportsList()
     }
 
     override fun showInfoMessage(msg: String) {
@@ -53,7 +56,9 @@ class SportsListActivity : AppCompatActivity(), SportsListContract.View {
     }
 
     override fun publishListData(list: MutableList<String>) {
-        toast("publish data")
+        adapter?.clear()
+        adapter?.addAll(list)
+        adapter?.notifyDataSetChanged()
     }
 
     override fun onDestroy() {

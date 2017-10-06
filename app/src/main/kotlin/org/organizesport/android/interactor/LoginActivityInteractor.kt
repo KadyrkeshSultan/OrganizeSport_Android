@@ -14,10 +14,10 @@ import javax.inject.Inject
  * This class refers to the interactor attached to the {@link LoginActivity} view and related
  * entities.
  *
- * @author psor1i
+ * @author pablol.
  * @since 1.0
  */
-class LoginActivityInteractor(private val presenter: LoginActivityPresenter?): LoginContract.Interactor {
+class LoginActivityInteractor(private var output: LoginContract.InteractorOutput?): LoginContract.Interactor {
 
     companion object {
         private val TAG: String = "LoginActivityInteractor"
@@ -36,13 +36,13 @@ class LoginActivityInteractor(private val presenter: LoginActivityPresenter?): L
             auth?.signInWithEmailAndPassword(email, password)
                     ?.addOnCompleteListener { task: Task<AuthResult> ->
                         if (task.isSuccessful) {
-                            presenter?.loginSuccessful()
+                            output?.onLoginSuccess()
                         } else {
-                            presenter?.loginError()
+                            output?.onLoginError()
                         }
                     }
         } else {
-            presenter?.noNetworkAccess()
+            output?.noNetworkAccess()
         }
 
     }
@@ -52,13 +52,17 @@ class LoginActivityInteractor(private val presenter: LoginActivityPresenter?): L
             auth?.createUserWithEmailAndPassword(email, password)
                     ?.addOnCompleteListener { task: Task<AuthResult> ->
                         if (task.isSuccessful) {
-                            presenter?.registerSuccessful()
+                            output?.onRegisterSuccess()
                         } else {
-                            presenter?.registerError()
+                            output?.onRegisterError()
                         }
                     }
         } else {
-            presenter?.noNetworkAccess()
+            output?.noNetworkAccess()
         }
+    }
+
+    override fun unregister() {
+        output = null
     }
 }
