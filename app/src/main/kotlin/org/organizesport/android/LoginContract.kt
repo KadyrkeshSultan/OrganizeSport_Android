@@ -12,8 +12,8 @@ interface LoginContract {
         fun showRegisterUi()
         fun showLoading()
         fun hideLoading()
-        fun accessApplication()
         fun showInfoMessage(msg: String)
+        fun clearTextFields()
     }
 
     interface Presenter {
@@ -22,6 +22,7 @@ interface LoginContract {
         fun registerClicked(email: String, password: String)
         fun accessModeStatusClicked()
         // Model updates
+        fun onViewCreated()
         fun onDestroy()
     }
 

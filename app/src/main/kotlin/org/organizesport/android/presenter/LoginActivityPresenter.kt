@@ -86,6 +86,11 @@ class LoginActivityPresenter(private var view: LoginContract.View?) : LoginContr
         view?.hideLoading()
         view?.showInfoMessage("Login error")
     }
+
+    override fun onViewCreated() {
+        view?.clearTextFields()
+    }
+
     override fun onDestroy() {
         view = null
         interactor?.unregister()

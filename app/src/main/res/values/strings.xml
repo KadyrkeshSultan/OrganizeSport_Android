@@ -9,4 +9,6 @@
     <string name="et_password_text">password</string>
     <string name="tv_login_text">Login</string>
     <string name="tv_register_text">Register</string>
+    <!-- activity_sports_list -->
+    <string name="tv_no_data_text">No data</string>
 </resources>

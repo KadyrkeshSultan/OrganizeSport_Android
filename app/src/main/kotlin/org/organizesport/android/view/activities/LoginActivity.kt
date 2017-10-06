@@ -83,6 +83,7 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
     override fun onResume() {
         super.onResume()
         BaseApplication.INSTANCE.cicerone.navigatorHolder.setNavigator(this.navigator)
+        presenter?.onViewCreated()
     }
 
     override fun onPause() {
@@ -135,8 +136,9 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         toast(msg)
     }
 
-    override fun accessApplication() {
-//        presenter?.accessModeStatusClicked()
+    override fun clearTextFields() {
+        etEmail?.setText("")
+//        etPassword?.setText("")
     }
 
     override fun onDestroy() {
