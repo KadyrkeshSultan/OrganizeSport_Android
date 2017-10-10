@@ -9,24 +9,29 @@ package org.organizesport.android
 interface SportsListContract {
     interface View {
         fun showInfoMessage(msg: String)
-        fun publishListData(list: MutableList<String>)
+        fun publishListData(list: List<String>)
+        fun showLoading()
+        fun hideLoading()
     }
 
     interface Presenter {
         // User actions
-        fun listItemClicked(position: Int)
+        fun listItemClicked(sport: String?)
         // Model updates
         fun loadSportsList()
         fun onDestroy()
     }
 
     interface Interactor {
-        fun fetchData()
+        fun fetchData(dataKey: String)
+        fun queryUserData(dataKey: String, newData: String?)
+        fun updateUserData(dataKey: String, data: List<String>)
         fun unregister()
     }
 
     interface InteractorOutput {
-        fun onDataFetched(list: MutableList<String>)
+        fun onDataFetched(list: List<String>)
+        fun onQueryResult(list: List<String>)
         fun onDataError()
     }
 }

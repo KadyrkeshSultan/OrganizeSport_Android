@@ -29,6 +29,7 @@ interface LoginContract {
     interface Interactor {
         fun login(email: String, password: String)
         fun register(email: String, password: String)
+        fun createUserIfNotExisting(userEmail: String?)
         fun unregister()
     }
 

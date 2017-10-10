@@ -32,6 +32,7 @@ class LoginActivityPresenter(private var view: LoginContract.View?) : LoginContr
             })
         }
     }
+    private var userEmail: String? = null
     private var loginStatus: LoginStatus = LoginStatus.LOGIN
     private var interactor: LoginContract.Interactor? = LoginActivityInteractor(this)
     private val router: Router? by lazy { BaseApplication.INSTANCE.cicerone.router }
@@ -47,6 +48,8 @@ class LoginActivityPresenter(private var view: LoginContract.View?) : LoginContr
 
     override fun registerClicked(email: String, password: String) {
         if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
+            view?.showLoading()
+            userEmail = email
             interactor?.register(email, password)
         } else {
             view?.showInfoMessage("Register error")
@@ -64,12 +67,15 @@ class LoginActivityPresenter(private var view: LoginContract.View?) : LoginContr
     override fun onRegisterError() {
         view?.hideLoading()
         view?.showInfoMessage("Register error")
+        view?.clearTextFields()
     }
 
     override fun onRegisterSuccess() {
+        interactor?.createUserIfNotExisting(userEmail)
+        userEmail = null
         view?.hideLoading()
         view?.showInfoMessage("Register successful")
-        router?.navigateTo(SampleActivity.TAG)
+        router?.navigateTo(SportsListActivity.TAG)
     }
 
     override fun noNetworkAccess() {
@@ -85,9 +91,11 @@ class LoginActivityPresenter(private var view: LoginContract.View?) : LoginContr
     override fun onLoginError() {
         view?.hideLoading()
         view?.showInfoMessage("Login error")
+        view?.clearTextFields()
     }
 
     override fun onViewCreated() {
+        view?.showLoginUi()
         view?.clearTextFields()
     }
 

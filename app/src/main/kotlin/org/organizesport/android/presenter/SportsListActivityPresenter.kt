@@ -1,5 +1,6 @@
 package org.organizesport.android.presenter
 
+import android.util.Log
 import org.organizesport.android.BaseApplication
 import org.organizesport.android.SportsListContract
 import org.organizesport.android.interactor.SportsListActivityInteractor
@@ -22,16 +23,22 @@ class SportsListActivityPresenter(private var view: SportsListContract.View?) : 
     private var interactor: SportsListContract.Interactor? = SportsListActivityInteractor(this)
     private val router: Router? by lazy { BaseApplication.INSTANCE.cicerone.router }
 
-    override fun listItemClicked(position: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun listItemClicked(sport: String?) {
+        view?.showLoading()
+        interactor?.queryUserData("sports", sport)
     }
 
     override fun loadSportsList() {
-        interactor?.fetchData()
+        interactor?.fetchData("sports")
     }
 
-    override fun onDataFetched(list: MutableList<String>) {
+    override fun onDataFetched(list: List<String>) {
         view?.publishListData(list)
+    }
+
+    override fun onQueryResult(list: List<String>) {
+        view?.hideLoading()
+        interactor?.updateUserData("sports", list)
     }
 
     override fun onDataError() {

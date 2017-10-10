@@ -4,9 +4,11 @@ import android.content.Context
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import org.organizesport.android.BaseApplication
 import org.organizesport.android.LoginContract
-import org.organizesport.android.presenter.LoginActivityPresenter
+import org.organizesport.android.entity.User
 import org.organizesport.android.utils.isNetworkConnected
 import javax.inject.Inject
 
@@ -25,7 +27,8 @@ class LoginActivityInteractor(private var output: LoginContract.InteractorOutput
 
     @Inject
     lateinit var context: Context
-    private val auth: FirebaseAuth? by lazy { FirebaseAuth.getInstance() }
+    private val fbAuth: FirebaseAuth? by lazy { FirebaseAuth.getInstance() }
+    private val fbDatabase: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
 
     init {
         BaseApplication.INSTANCE.getModelComponent().injectDependency(this)
@@ -33,7 +36,7 @@ class LoginActivityInteractor(private var output: LoginContract.InteractorOutput
 
     override fun login(email: String, password: String) {
         if (isNetworkConnected(context)) {
-            auth?.signInWithEmailAndPassword(email, password)
+            fbAuth?.signInWithEmailAndPassword(email, password)
                     ?.addOnCompleteListener { task: Task<AuthResult> ->
                         if (task.isSuccessful) {
                             output?.onLoginSuccess()
@@ -49,7 +52,7 @@ class LoginActivityInteractor(private var output: LoginContract.InteractorOutput
 
     override fun register(email: String, password: String) {
         if (isNetworkConnected(context)) {
-            auth?.createUserWithEmailAndPassword(email, password)
+            fbAuth?.createUserWithEmailAndPassword(email, password)
                     ?.addOnCompleteListener { task: Task<AuthResult> ->
                         if (task.isSuccessful) {
                             output?.onRegisterSuccess()
@@ -57,6 +60,17 @@ class LoginActivityInteractor(private var output: LoginContract.InteractorOutput
                             output?.onRegisterError()
                         }
                     }
+        } else {
+            output?.noNetworkAccess()
+        }
+    }
+
+    override fun createUserIfNotExisting(userEmail: String?) {
+        if (isNetworkConnected(context)) {
+
+            fbDatabase.child("users").child(fbAuth?.currentUser?.uid).setValue(
+                    User(email = fbAuth?.currentUser?.email, sports = listOf())
+            )
         } else {
             output?.noNetworkAccess()
         }

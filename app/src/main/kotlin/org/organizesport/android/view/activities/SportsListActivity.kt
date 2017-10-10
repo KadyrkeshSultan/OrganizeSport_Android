@@ -2,13 +2,13 @@ package org.organizesport.android.view.activities
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import android.widget.ProgressBar
 import android.widget.TextView
-import com.jakewharton.rxbinding2.widget.dataChanges
 
 import kotlinx.android.synthetic.main.activity_sports_list.*
-import org.jetbrains.anko.find
 
 import org.jetbrains.anko.toast
 import org.organizesport.android.R
@@ -32,6 +32,7 @@ class SportsListActivity : AppCompatActivity(), SportsListContract.View {
 
     private var presenter: SportsListContract.Presenter? = null
     private val lvSportsList: ListView? by lazy { lv_splist_activity_sports_list }
+    private val progressBar: ProgressBar? by lazy { pb_loading_activity_sports_list }
     private val tvNoData: TextView? by lazy { tv_no_data_activity_sports_list }
     private val adapter: ArrayAdapter<String>? by lazy {
         ArrayAdapter(
@@ -47,7 +48,7 @@ class SportsListActivity : AppCompatActivity(), SportsListContract.View {
         presenter = SportsListActivityPresenter(this)
 
         lvSportsList?.setOnItemClickListener { parent, view, position, id ->
-            toast("item $position clicked")
+            presenter?.listItemClicked(adapter?.getItem(position))
         }
         lvSportsList?.emptyView = tvNoData   // 'View' to be shown when no data is available
         lvSportsList?.adapter = adapter
@@ -59,10 +60,20 @@ class SportsListActivity : AppCompatActivity(), SportsListContract.View {
         toast(msg)
     }
 
-    override fun publishListData(list: MutableList<String>) {
+    override fun publishListData(list: List<String>) {
         adapter?.clear()
         adapter?.addAll(list)
         adapter?.notifyDataSetChanged()
+    }
+
+    override fun showLoading() {
+        progressBar?.visibility = View.VISIBLE
+        lvSportsList?.isEnabled = false
+    }
+
+    override fun hideLoading() {
+        progressBar?.visibility = View.GONE
+        lvSportsList?.isEnabled = true
     }
 
     override fun onDestroy() {
