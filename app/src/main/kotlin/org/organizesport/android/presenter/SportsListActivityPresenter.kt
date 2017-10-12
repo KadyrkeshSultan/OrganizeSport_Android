@@ -20,6 +20,7 @@ class SportsListActivityPresenter(private var view: SportsListContract.View?) : 
         private val TAG: String = "SportsListPresenter"
     }
 
+    private lateinit var availableSportsList: List<String>
     private var interactor: SportsListContract.Interactor? = SportsListActivityInteractor(this)
     private val router: Router? by lazy { BaseApplication.INSTANCE.cicerone.router }
 
@@ -32,7 +33,12 @@ class SportsListActivityPresenter(private var view: SportsListContract.View?) : 
         interactor?.fetchData("sports")
     }
 
+    override fun checkSubscribedSportsList() {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
     override fun onDataFetched(list: List<String>) {
+        availableSportsList = list
         view?.publishListData(list)
     }
 

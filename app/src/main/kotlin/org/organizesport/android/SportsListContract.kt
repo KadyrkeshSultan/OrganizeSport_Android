@@ -19,6 +19,7 @@ interface SportsListContract {
         fun listItemClicked(sport: String?)
         // Model updates
         fun loadSportsList()
+        fun checkSubscribedSportsList()
         fun onDestroy()
     }
 

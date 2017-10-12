@@ -2,6 +2,7 @@ package org.organizesport.android.view.activities
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.ListView
@@ -14,6 +15,7 @@ import org.jetbrains.anko.toast
 import org.organizesport.android.R
 import org.organizesport.android.SportsListContract
 import org.organizesport.android.presenter.SportsListActivityPresenter
+import org.organizesport.android.view.adapters.SportsListAdapter
 
 /**
  * This class refers to the 'SportsListActivity' View, following the MVP architectural pattern.
@@ -34,12 +36,20 @@ class SportsListActivity : AppCompatActivity(), SportsListContract.View {
     private val lvSportsList: ListView? by lazy { lv_splist_activity_sports_list }
     private val progressBar: ProgressBar? by lazy { pb_loading_activity_sports_list }
     private val tvNoData: TextView? by lazy { tv_no_data_activity_sports_list }
-    private val adapter: ArrayAdapter<String>? by lazy {
-        ArrayAdapter(
+    private val adapter: SportsListAdapter? by lazy {
+        SportsListAdapter(
                 this,
-                android.R.layout.simple_list_item_1,
-                mutableListOf<String>())
+                R.layout.list_view_custom_layout,
+                ArrayList()
+        )
     }
+//    private val adapter: ArrayAdapter<String>? by lazy {
+//        ArrayAdapter<String>(
+//                this,
+//                android.R.layout.simple_list_item_1,
+//                ArrayList()
+//        )
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,12 +58,14 @@ class SportsListActivity : AppCompatActivity(), SportsListContract.View {
         presenter = SportsListActivityPresenter(this)
 
         lvSportsList?.setOnItemClickListener { parent, view, position, id ->
+            Log.d(TAG, "item clicked")
             presenter?.listItemClicked(adapter?.getItem(position))
         }
         lvSportsList?.emptyView = tvNoData   // 'View' to be shown when no data is available
         lvSportsList?.adapter = adapter
 
         presenter?.loadSportsList()
+//        presenter?.checkSubscribedSportsList()
     }
 
     override fun showInfoMessage(msg: String) {
