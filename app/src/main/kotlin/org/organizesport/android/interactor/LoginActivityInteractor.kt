@@ -30,6 +30,7 @@ class LoginActivityInteractor(private var output: LoginContract.InteractorOutput
     private val fbAuth: FirebaseAuth? by lazy { FirebaseAuth.getInstance() }
     private val fbDatabase: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
 
+    // Inject Dagger 2 dependencies
     init {
         BaseApplication.INSTANCE.getModelComponent().injectDependency(this)
     }

@@ -1,7 +1,6 @@
 package org.organizesport.android.view.activities
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.widget.ListView
@@ -11,6 +10,7 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_sports_list.*
 
 import org.jetbrains.anko.toast
+import org.organizesport.android.BaseActivity
 import org.organizesport.android.R
 import org.organizesport.android.SportsListContract
 import org.organizesport.android.presenter.SportsListActivityPresenter
@@ -25,7 +25,7 @@ import org.organizesport.android.view.adapters.SportsListAdapter
  * @author pablol.
  * @since 1.0
  */
-class SportsListActivity : AppCompatActivity(), SportsListContract.View {
+class SportsListActivity : BaseActivity(), SportsListContract.View {
 
     companion object {
         val TAG: String = "SportsListActivity"

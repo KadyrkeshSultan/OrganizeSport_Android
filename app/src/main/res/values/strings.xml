@@ -1,6 +1,8 @@
 <resources>
     <!-- app global resources -->
     <string name="app_name">Organize Sport</string>
+    <!-- menu_base -->
+    <string name="menu_item_settings_text">Settings</string>
     <!-- activity_login -->
     <string name="tv_activity_login_place_holder_text">activity_login</string>
     <string name="btn_login_text">Login</string>
