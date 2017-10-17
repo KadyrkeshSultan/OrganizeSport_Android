@@ -1,6 +1,7 @@
 package org.organizesport.android.view.activities
 
 import android.os.Bundle
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
 import android.widget.ListView
@@ -8,6 +9,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 
 import kotlinx.android.synthetic.main.activity_sports_list.*
+import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
 
 import org.jetbrains.anko.toast
 import org.organizesport.android.BaseActivity
@@ -31,6 +33,7 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
         val TAG: String = "SportsListActivity"
     }
 
+    private val toolbar: Toolbar by lazy { toolbar_toolbar_view }
     private var presenter: SportsListContract.Presenter? = null
     private val lvSportsList: ListView? by lazy { lv_splist_activity_sports_list }
     private val progressBar: ProgressBar? by lazy { pb_loading_activity_sports_list }
@@ -47,6 +50,8 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sports_list)
 
+        this.initView()
+
         presenter = SportsListActivityPresenter(this)
 
         lvSportsList?.setOnItemClickListener { parent, view, position, id ->
@@ -57,6 +62,11 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
         lvSportsList?.adapter = adapter
 
         presenter?.onActivityCreated()
+    }
+
+    private fun initView() {
+        // Toolbar setup
+        setSupportActionBar(toolbar)   // Replaces the 'ActionBar' with the 'Toolbar'
     }
 
     override fun showInfoMessage(msg: String) {

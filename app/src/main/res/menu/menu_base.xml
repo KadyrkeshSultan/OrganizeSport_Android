@@ -5,5 +5,5 @@
         android:id="@+id/menu_option_settings"
         android:icon="@drawable/ic_menu_settings"
         android:title="@string/menu_item_settings_text"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="never" />
 </menu>
