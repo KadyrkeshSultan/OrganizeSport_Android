@@ -2,6 +2,7 @@ package org.organizesport.android.di
 
 import dagger.Component
 import org.organizesport.android.interactor.LoginActivityInteractor
+import org.organizesport.android.interactor.SportsListActivityInteractor
 import javax.inject.Singleton
 
 /**
@@ -18,4 +19,5 @@ import javax.inject.Singleton
 @Component(modules = arrayOf(ModelModule::class))
 interface ModelComponent {
     fun injectDependency(loginInteractor: LoginActivityInteractor)
+    fun injectDependency(sportsListInteractor: SportsListActivityInteractor)
 }

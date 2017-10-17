@@ -137,7 +137,6 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
     }
 
     override fun clearTextFields() {
-//        etEmail?.setText("")
         etPassword?.setText("")
     }
 

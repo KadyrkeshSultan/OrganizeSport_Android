@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -40,16 +39,9 @@ class SportsListActivity : AppCompatActivity(), SportsListContract.View {
         SportsListAdapter(
                 this,
                 R.layout.list_view_custom_layout,
-                ArrayList()
+                HashMap()
         )
     }
-//    private val adapter: ArrayAdapter<String>? by lazy {
-//        ArrayAdapter<String>(
-//                this,
-//                android.R.layout.simple_list_item_1,
-//                ArrayList()
-//        )
-//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,23 +51,20 @@ class SportsListActivity : AppCompatActivity(), SportsListContract.View {
 
         lvSportsList?.setOnItemClickListener { parent, view, position, id ->
             Log.d(TAG, "item clicked")
-            presenter?.listItemClicked(adapter?.getItem(position))
+            presenter?.listItemClicked(adapter?.getItem(position)?.keys?.elementAt(0))
         }
         lvSportsList?.emptyView = tvNoData   // 'View' to be shown when no data is available
         lvSportsList?.adapter = adapter
 
-        presenter?.loadSportsList()
-//        presenter?.checkSubscribedSportsList()
+        presenter?.onActivityCreated()
     }
 
     override fun showInfoMessage(msg: String) {
         toast(msg)
     }
 
-    override fun publishListData(list: List<String>) {
-        adapter?.clear()
-        adapter?.addAll(list)
-        adapter?.notifyDataSetChanged()
+    override fun publishListData(map: Map<String, Boolean>) {
+        adapter?.updateData(map)
     }
 
     override fun showLoading() {

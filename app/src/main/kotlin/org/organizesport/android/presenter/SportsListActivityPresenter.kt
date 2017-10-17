@@ -1,6 +1,5 @@
 package org.organizesport.android.presenter
 
-import android.util.Log
 import org.organizesport.android.BaseApplication
 import org.organizesport.android.SportsListContract
 import org.organizesport.android.interactor.SportsListActivityInteractor
@@ -24,27 +23,37 @@ class SportsListActivityPresenter(private var view: SportsListContract.View?) : 
     private var interactor: SportsListContract.Interactor? = SportsListActivityInteractor(this)
     private val router: Router? by lazy { BaseApplication.INSTANCE.cicerone.router }
 
+
+    override fun onActivityCreated() {
+        view?.showLoading()
+        interactor?.loadSportsList()
+    }
+
+    override fun onSportsListLoaded(list: List<String>) {
+        availableSportsList = list
+        interactor?.loadUserSportsList()
+    }
+
+    override fun onUserSportsListLoaded(list: List<String>) {
+        val map = availableSportsList.associateBy({it}, {list.contains(it)})
+        interactor?.updateUserData("sports", list)
+        view?.hideLoading()
+        view?.publishListData(map)
+    }
+
     override fun listItemClicked(sport: String?) {
         view?.showLoading()
         interactor?.queryUserData("sports", sport)
     }
 
-    override fun loadSportsList() {
-        interactor?.fetchData("sports")
-    }
-
-    override fun checkSubscribedSportsList() {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
-
-    override fun onDataFetched(list: List<String>) {
-        availableSportsList = list
-        view?.publishListData(list)
-    }
-
     override fun onQueryResult(list: List<String>) {
         view?.hideLoading()
         interactor?.updateUserData("sports", list)
+    }
+
+    override fun noNetworkAccess() {
+        view?.hideLoading()
+        view?.showInfoMessage("No network access")
     }
 
     override fun onDataError() {

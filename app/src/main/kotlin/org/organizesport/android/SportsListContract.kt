@@ -9,7 +9,7 @@ package org.organizesport.android
 interface SportsListContract {
     interface View {
         fun showInfoMessage(msg: String)
-        fun publishListData(list: List<String>)
+        fun publishListData(map: Map<String, Boolean>)
         fun showLoading()
         fun hideLoading()
     }
@@ -18,21 +18,23 @@ interface SportsListContract {
         // User actions
         fun listItemClicked(sport: String?)
         // Model updates
-        fun loadSportsList()
-        fun checkSubscribedSportsList()
+        fun onActivityCreated()
         fun onDestroy()
     }
 
     interface Interactor {
-        fun fetchData(dataKey: String)
+        fun loadSportsList()
+        fun loadUserSportsList()
         fun queryUserData(dataKey: String, newData: String?)
         fun updateUserData(dataKey: String, data: List<String>)
         fun unregister()
     }
 
     interface InteractorOutput {
-        fun onDataFetched(list: List<String>)
+        fun onSportsListLoaded(list: List<String>)
+        fun onUserSportsListLoaded(list: List<String>)
         fun onQueryResult(list: List<String>)
+        fun noNetworkAccess()
         fun onDataError()
     }
 }

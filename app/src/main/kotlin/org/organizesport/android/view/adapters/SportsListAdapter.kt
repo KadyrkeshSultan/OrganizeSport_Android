@@ -4,7 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
+import android.widget.BaseAdapter
 import android.widget.TextView
 import android.widget.ImageButton
 import org.jetbrains.anko.find
@@ -19,15 +19,16 @@ import org.organizesport.android.R
  * @author pablol.
  * @since 1.0
  */
-class SportsListAdapter(private val ctx: Context, resource: Int, private var dataList: ArrayList<String>) : ArrayAdapter<String>(ctx, resource, dataList) {
+class SportsListAdapter(private val ctx: Context, resource: Int, private var dataList: Map<String, Boolean>) : BaseAdapter() {
+
     // Creating a ViewHolder to speed up the performance
     private inner class ViewHolder {
         var tvSport: TextView? = null
         var imgBtnSelectedSport: ImageButton? = null
     }
 
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View? {
-        var convertView = convertView
+    override fun getView(position: Int, view: View?, parent: ViewGroup): View? {
+        var convertView = view
 
         val viewHolder: ViewHolder
         if (convertView == null) {
@@ -43,11 +44,22 @@ class SportsListAdapter(private val ctx: Context, resource: Int, private var dat
         }
 
         // 'viewHolder' can be now populated
-        viewHolder.tvSport?.text = dataList[position]
-
+        viewHolder.tvSport?.text = dataList.keys.elementAt(position)
+        viewHolder.imgBtnSelectedSport?.isSelected = dataList.values.elementAt(position)
 
         return convertView
     }
 
+    override fun getItem(position: Int) = mapOf(
+            Pair(dataList.keys.elementAt(position), dataList.values.elementAt(position))
+    )
+
+    override fun getItemId(position: Int) = position.toLong()
+
     override fun getCount(): Int = dataList.size
+
+    fun updateData(map: Map<String, Boolean>) {
+        dataList = map
+        this.notifyDataSetChanged()
+    }
 }
