@@ -4,9 +4,11 @@ import android.content.Context
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import org.organizesport.android.BaseApplication
 import org.organizesport.android.LoginContract
-import org.organizesport.android.presenter.LoginActivityPresenter
+import org.organizesport.android.entity.User
 import org.organizesport.android.utils.isNetworkConnected
 import javax.inject.Inject
 
@@ -14,10 +16,10 @@ import javax.inject.Inject
  * This class refers to the interactor attached to the {@link LoginActivity} view and related
  * entities.
  *
- * @author psor1i
+ * @author pablol.
  * @since 1.0
  */
-class LoginActivityInteractor(private val presenter: LoginActivityPresenter?): LoginContract.Interactor {
+class LoginActivityInteractor(private var output: LoginContract.InteractorOutput?): LoginContract.Interactor {
 
     companion object {
         private val TAG: String = "LoginActivityInteractor"
@@ -25,7 +27,8 @@ class LoginActivityInteractor(private val presenter: LoginActivityPresenter?): L
 
     @Inject
     lateinit var context: Context
-    private val auth: FirebaseAuth? by lazy { FirebaseAuth.getInstance() }
+    private val fbAuth: FirebaseAuth? by lazy { FirebaseAuth.getInstance() }
+    private val fbDatabase: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
 
     init {
         BaseApplication.INSTANCE.getModelComponent().injectDependency(this)
@@ -33,32 +36,47 @@ class LoginActivityInteractor(private val presenter: LoginActivityPresenter?): L
 
     override fun login(email: String, password: String) {
         if (isNetworkConnected(context)) {
-            auth?.signInWithEmailAndPassword(email, password)
+            fbAuth?.signInWithEmailAndPassword(email, password)
                     ?.addOnCompleteListener { task: Task<AuthResult> ->
                         if (task.isSuccessful) {
-                            presenter?.loginSuccessful()
+                            output?.onLoginSuccess()
                         } else {
-                            presenter?.loginError()
+                            output?.onLoginError()
                         }
                     }
         } else {
-            presenter?.noNetworkAccess()
+            output?.noNetworkAccess()
         }
 
     }
 
     override fun register(email: String, password: String) {
         if (isNetworkConnected(context)) {
-            auth?.createUserWithEmailAndPassword(email, password)
+            fbAuth?.createUserWithEmailAndPassword(email, password)
                     ?.addOnCompleteListener { task: Task<AuthResult> ->
                         if (task.isSuccessful) {
-                            presenter?.registerSuccessful()
+                            output?.onRegisterSuccess()
                         } else {
-                            presenter?.registerError()
+                            output?.onRegisterError()
                         }
                     }
         } else {
-            presenter?.noNetworkAccess()
+            output?.noNetworkAccess()
         }
+    }
+
+    override fun createUserIfNotExisting(userEmail: String?) {
+        if (isNetworkConnected(context)) {
+
+            fbDatabase.child("users").child(fbAuth?.currentUser?.uid).setValue(
+                    User(email = fbAuth?.currentUser?.email, sports = listOf())
+            )
+        } else {
+            output?.noNetworkAccess()
+        }
+    }
+
+    override fun unregister() {
+        output = null
     }
 }

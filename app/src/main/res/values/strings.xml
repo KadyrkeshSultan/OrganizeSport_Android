@@ -1,6 +1,6 @@
 <resources>
     <!-- app global resources -->
-    <string name="app_name">OrganizeSport</string>
+    <string name="app_name">Organize Sport</string>
     <!-- activity_login -->
     <string name="tv_activity_login_place_holder_text">activity_login</string>
     <string name="btn_login_text">Login</string>
@@ -9,4 +9,9 @@
     <string name="et_password_text">password</string>
     <string name="tv_login_text">Login</string>
     <string name="tv_register_text">Register</string>
+    <!-- activity_sports_list -->
+    <string name="tv_no_data_text">No data</string>
+    <!-- list_view_custom_layout -->
+    <string name="tv_dummy_text">Lorem ipsum</string>
+    <string name="tv_preferable_sport_icon_text">Preferable sport icon</string>
 </resources>
