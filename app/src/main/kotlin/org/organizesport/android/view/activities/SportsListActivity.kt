@@ -1,6 +1,8 @@
 package org.organizesport.android.view.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.FloatingActionButton
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.View
@@ -13,10 +15,15 @@ import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
 
 import org.jetbrains.anko.toast
 import org.organizesport.android.BaseActivity
+import org.organizesport.android.BaseApplication
 import org.organizesport.android.R
 import org.organizesport.android.SportsListContract
 import org.organizesport.android.presenter.SportsListActivityPresenter
+import org.organizesport.android.utils.addClickAction
 import org.organizesport.android.view.adapters.SportsListAdapter
+import ru.terrakok.cicerone.Navigator
+import ru.terrakok.cicerone.commands.Command
+import ru.terrakok.cicerone.commands.Forward
 
 /**
  * This class refers to the 'SportsListActivity' View, following the MVP architectural pattern.
@@ -33,7 +40,24 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
         val TAG: String = "SportsListActivity"
     }
 
+    private val navigator: Navigator? by lazy {
+        object : Navigator {
+            override fun applyCommand(command: Command) {
+                if (command is Forward) {
+                    forward(command)
+                }
+            }
+
+            private fun forward(command: Forward) {
+                when (command.screenKey) {
+                    RssFeedActivity.TAG -> startActivity(Intent(this@SportsListActivity, RssFeedActivity::class.java))
+                    else -> Log.e("Cicerone", "Unknown screen: " + command.screenKey)
+                }
+            }
+        }
+    }
     private val toolbar: Toolbar by lazy { toolbar_toolbar_view }
+    private val rssFeedBtn: FloatingActionButton by lazy { fab_feeds_activity_sports_list }
     private var presenter: SportsListContract.Presenter? = null
     private val lvSportsList: ListView? by lazy { lv_splist_activity_sports_list }
     private val progressBar: ProgressBar? by lazy { pb_loading_activity_sports_list }
@@ -50,8 +74,9 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sports_list)
 
-        this.initView()
-
+        rssFeedBtn.addClickAction({
+            presenter?.fabClicked(adapter?.getDataMap())
+        })
         presenter = SportsListActivityPresenter(this)
 
         lvSportsList?.setOnItemClickListener { parent, view, position, id ->
@@ -64,10 +89,17 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
         presenter?.onActivityCreated()
     }
 
-    private fun initView() {
-        // Toolbar setup
-        setSupportActionBar(toolbar)   // Replaces the 'ActionBar' with the 'Toolbar'
+    override fun onResume() {
+        super.onResume()
+        BaseApplication.INSTANCE.cicerone.navigatorHolder.setNavigator(this.navigator)
     }
+
+    override fun onPause() {
+        super.onPause()
+        BaseApplication.INSTANCE.cicerone.navigatorHolder.removeNavigator()
+    }
+
+    override fun getToolbarInstance(): Toolbar? = toolbar
 
     override fun showInfoMessage(msg: String) {
         toast(msg)

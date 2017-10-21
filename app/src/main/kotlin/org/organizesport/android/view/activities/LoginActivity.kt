@@ -7,10 +7,6 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 
-import com.jakewharton.rxbinding2.view.clicks
-
-import io.reactivex.android.schedulers.AndroidSchedulers
-
 import kotlinx.android.synthetic.main.activity_login.*
 
 import org.jetbrains.anko.toast
@@ -18,6 +14,7 @@ import org.organizesport.android.BaseApplication
 import org.organizesport.android.LoginContract
 import org.organizesport.android.R
 import org.organizesport.android.presenter.LoginActivityPresenter
+import org.organizesport.android.utils.addClickAction
 import ru.terrakok.cicerone.Navigator
 
 import ru.terrakok.cicerone.commands.*
@@ -91,14 +88,6 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         BaseApplication.INSTANCE.cicerone.navigatorHolder.removeNavigator()
     }
 
-    /**
-     *
-     */
-    private fun Button.addClickAction(f: () -> Unit): Unit {
-        this.clicks()
-                .observeOn(AndroidSchedulers.mainThread())   // subscribers post on the UI thread
-                .subscribe { f() }
-    }
 
     override fun showLoginUi() {
         Log.d(TAG, "In-showLoginUi()")

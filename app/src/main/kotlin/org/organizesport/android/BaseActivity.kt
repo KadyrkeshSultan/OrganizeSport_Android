@@ -1,8 +1,8 @@
 package org.organizesport.android
 
-import android.os.Build
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -19,7 +19,18 @@ import android.view.MenuItem
 abstract class BaseActivity : AppCompatActivity() {
 
     companion object {
-        private val TAG: String = "LoginActivityInteractor"
+        private val TAG: String = "BaseActivity"
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        this.getToolbarInstance()?.let { this.initView(it) }
+    }
+
+    private fun initView(toolbar: Toolbar) {
+        // Toolbar setup
+        setSupportActionBar(toolbar)   // Replaces the 'ActionBar' with the 'Toolbar'
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -35,4 +46,12 @@ abstract class BaseActivity : AppCompatActivity() {
             false
         }
     }
+
+    /**
+     * Gets a {@link Toolbar} instance to be used as {@link ActionBar} in the current
+     * {@link Activity}. This function must be implemented by any child class.
+     *
+     * @return the {@link Toolbar} instance
+     */
+    abstract fun getToolbarInstance(): Toolbar?
 }

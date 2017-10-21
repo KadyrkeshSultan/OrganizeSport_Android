@@ -17,6 +17,7 @@ interface SportsListContract {
     interface Presenter {
         // User actions
         fun listItemClicked(sport: String?)
+        fun fabClicked(dataMap: Map<String, Boolean>?)
         // Model updates
         fun onActivityCreated()
         fun onDestroy()

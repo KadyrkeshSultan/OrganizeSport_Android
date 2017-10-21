@@ -19,10 +19,10 @@ import org.organizesport.android.R
  * @author pablol.
  * @since 1.0
  */
-class SportsListAdapter(private val ctx: Context, resource: Int, private var dataList: Map<String, Boolean>) : BaseAdapter() {
+class SportsListAdapter(private val ctx: Context, private val resource: Int, private var dataMap: Map<String, Boolean>) : BaseAdapter() {
 
     // Creating a ViewHolder to speed up the performance
-    private inner class ViewHolder {
+    private class ViewHolder {
         var tvSport: TextView? = null
         var imgBtnSelectedSport: ImageButton? = null
     }
@@ -32,7 +32,7 @@ class SportsListAdapter(private val ctx: Context, resource: Int, private var dat
 
         val viewHolder: ViewHolder
         if (convertView == null) {
-            convertView = LayoutInflater.from(ctx).inflate(R.layout.list_view_custom_layout, null)
+            convertView = LayoutInflater.from(ctx).inflate(resource, null)
 
             // Configure a 'ViewHolder'
             viewHolder = ViewHolder()
@@ -44,22 +44,24 @@ class SportsListAdapter(private val ctx: Context, resource: Int, private var dat
         }
 
         // 'viewHolder' can be now populated
-        viewHolder.tvSport?.text = dataList.keys.elementAt(position)
-        viewHolder.imgBtnSelectedSport?.isSelected = dataList.values.elementAt(position)
+        viewHolder.tvSport?.text = dataMap.keys.elementAt(position)
+        viewHolder.imgBtnSelectedSport?.isSelected = dataMap.values.elementAt(position)
 
         return convertView
     }
 
     override fun getItem(position: Int) = mapOf(
-            Pair(dataList.keys.elementAt(position), dataList.values.elementAt(position))
+            Pair(dataMap.keys.elementAt(position), dataMap.values.elementAt(position))
     )
 
     override fun getItemId(position: Int) = position.toLong()
 
-    override fun getCount(): Int = dataList.size
+    override fun getCount(): Int = dataMap.size
 
     fun updateData(map: Map<String, Boolean>) {
-        dataList = map
+        dataMap = map
         this.notifyDataSetChanged()
     }
+
+    fun getDataMap(): Map<String, Boolean> = dataMap
 }

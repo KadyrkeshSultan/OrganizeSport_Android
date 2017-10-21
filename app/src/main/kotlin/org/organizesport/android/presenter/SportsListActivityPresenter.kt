@@ -3,6 +3,7 @@ package org.organizesport.android.presenter
 import org.organizesport.android.BaseApplication
 import org.organizesport.android.SportsListContract
 import org.organizesport.android.interactor.SportsListActivityInteractor
+import org.organizesport.android.view.activities.RssFeedActivity
 import ru.terrakok.cicerone.Router
 
 /**
@@ -44,6 +45,10 @@ class SportsListActivityPresenter(private var view: SportsListContract.View?) : 
     override fun listItemClicked(sport: String?) {
         view?.showLoading()
         interactor?.queryUserData("sports", sport)
+    }
+
+    override fun fabClicked(dataMap: Map<String, Boolean>?) {
+        router?.navigateTo(RssFeedActivity.TAG, dataMap)
     }
 
     override fun onQueryResult(list: List<String>) {
