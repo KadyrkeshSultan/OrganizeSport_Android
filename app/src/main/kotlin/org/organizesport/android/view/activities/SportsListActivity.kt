@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.activity_sports_list.*
 import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
 
 import org.jetbrains.anko.toast
-import org.organizesport.android.BaseActivity
+import org.organizesport.android.view.BaseActivity
 import org.organizesport.android.BaseApplication
 import org.organizesport.android.R
 import org.organizesport.android.SportsListContract
@@ -42,6 +42,7 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
 
     private val navigator: Navigator? by lazy {
         object : Navigator {
+
             override fun applyCommand(command: Command) {
                 if (command is Forward) {
                     forward(command)
@@ -49,8 +50,12 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
             }
 
             private fun forward(command: Forward) {
+
+                val data = (command.transitionData as Map<*, *>).filter { it.value == true }
+
                 when (command.screenKey) {
-                    RssFeedActivity.TAG -> startActivity(Intent(this@SportsListActivity, RssFeedActivity::class.java))
+                    RssFeedActivity.TAG -> startActivity(Intent(this@SportsListActivity, RssFeedActivity::class.java)
+                            .putExtra("data", data as HashMap))
                     else -> Log.e("Cicerone", "Unknown screen: " + command.screenKey)
                 }
             }

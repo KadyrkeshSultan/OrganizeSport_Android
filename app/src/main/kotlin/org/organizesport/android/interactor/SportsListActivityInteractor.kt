@@ -62,6 +62,7 @@ class SportsListActivityInteractor(private var output: SportsListContract.Intera
             output?.onDataError()
         }
     }
+
     // Inject Dagger 2 dependencies
     init {
         BaseApplication.INSTANCE.getModelComponent().injectDependency(this)

@@ -1,11 +1,11 @@
-package org.organizesport.android
+package org.organizesport.android.view
 
-import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import org.organizesport.android.R
 
 /**
  * This class extends from {@link AppCompatActivity}.

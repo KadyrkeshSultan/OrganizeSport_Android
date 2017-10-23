@@ -12,11 +12,15 @@ interface RssFeedContract {
     }
 
     interface Presenter {
+        fun onViewCreated(data: Map<*, *>?)
+        fun onDestroy()
 
     }
 
     interface Interactor {
 
+        fun unregister()
+        fun loadRssFeed(sports: Set<Any?>?)
     }
 
     interface InteractorOutput {

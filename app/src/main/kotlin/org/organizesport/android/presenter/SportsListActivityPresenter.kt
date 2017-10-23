@@ -16,14 +16,13 @@ import ru.terrakok.cicerone.Router
 class SportsListActivityPresenter(private var view: SportsListContract.View?) : SportsListContract.Presenter,
         SportsListContract.InteractorOutput {
 
-    companion object {
+    private companion object {
         private val TAG: String = "SportsListPresenter"
     }
 
     private lateinit var availableSportsList: List<String>
     private var interactor: SportsListContract.Interactor? = SportsListActivityInteractor(this)
     private val router: Router? by lazy { BaseApplication.INSTANCE.cicerone.router }
-
 
     override fun onActivityCreated() {
         view?.showLoading()

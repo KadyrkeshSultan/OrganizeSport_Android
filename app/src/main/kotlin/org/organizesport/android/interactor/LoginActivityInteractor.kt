@@ -19,7 +19,7 @@ import javax.inject.Inject
  * @author pablol.
  * @since 1.0
  */
-class LoginActivityInteractor(private var output: LoginContract.InteractorOutput?): LoginContract.Interactor {
+class LoginActivityInteractor(private var output: LoginContract.InteractorOutput?) : LoginContract.Interactor {
 
     companion object {
         private val TAG: String = "LoginActivityInteractor"
