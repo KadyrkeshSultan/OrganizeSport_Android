@@ -7,6 +7,7 @@ import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
 import org.organizesport.android.view.BaseActivity
 import org.organizesport.android.R
 import org.organizesport.android.RssFeedContract
+import org.organizesport.android.entity.JokeModel
 import org.organizesport.android.presenter.RssFeedActivityPresenter
 
 /**
@@ -37,6 +38,16 @@ class RssFeedActivity : BaseActivity(), RssFeedContract.View {
     override fun onResume() {
         super.onResume()
         presenter?.onViewCreated(intent.getSerializableExtra("data")?.let { it as HashMap<*, *> })
+    }
+
+    override fun publishListData(jokes: List<JokeModel.Jokes>) {
+        Log.d(TAG, "publishListData")
+    }
+
+    override fun showLoading() {
+    }
+
+    override fun hideLoading() {
     }
 
     override fun onDestroy() {

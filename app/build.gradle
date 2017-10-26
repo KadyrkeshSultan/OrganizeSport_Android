@@ -115,12 +115,16 @@ dependencies {
     compile "com.google.firebase:firebase-core:$rootProject.ext.firebaseVersion"
     compile "com.google.firebase:firebase-auth:$rootProject.ext.firebaseVersion"
     compile "com.google.firebase:firebase-database:$rootProject.ext.firebaseVersion"
-    // Including RxJava and RxKotlin
+    // Including RxJava 2 and RxKotlin
     compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJavaVersion"
     compile "io.reactivex.rxjava2:rxkotlin:$rootProject.ext.rxKotlinVersion"
     // Including 3rd party libraries (RxBinding, and Cicerone)
     compile "com.jakewharton.rxbinding2:rxbinding-kotlin:$rootProject.ext.rxBindingVersion"
     compile "ru.terrakok.cicerone:cicerone:$rootProject.ext.ciceroneVersion"
+    // Retrofit 2
+    compile "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofit2Version"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$rootProject.ext.retrofit2Version"
+    compile "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit2Version"  // JSON converter
     // Including Dagger 2
     kapt "com.google.dagger:dagger-compiler:$rootProject.ext.dagger2Version"
     compile "com.google.dagger:dagger:$rootProject.ext.dagger2Version"

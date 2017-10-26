@@ -84,7 +84,7 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
         })
         presenter = SportsListActivityPresenter(this)
 
-        lvSportsList?.setOnItemClickListener { parent, view, position, id ->
+        lvSportsList?.setOnItemClickListener { _, _, position, _ ->
             Log.d(TAG, "item clicked")
             presenter?.listItemClicked(adapter?.getItem(position)?.keys?.elementAt(0))
         }

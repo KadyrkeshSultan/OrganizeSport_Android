@@ -1,5 +1,7 @@
 package org.organizesport.android
 
+import org.organizesport.android.entity.JokeModel
+
 /**
  * Contract interfaces for 'View' and 'Presenter' regarding {@link RssFeedActivity}
  *
@@ -8,7 +10,9 @@ package org.organizesport.android
  */
 interface RssFeedContract {
     interface View {
-
+        fun publishListData(jokes: List<JokeModel.Jokes>)
+        fun showLoading()
+        fun hideLoading()
     }
 
     interface Presenter {
@@ -24,6 +28,6 @@ interface RssFeedContract {
     }
 
     interface InteractorOutput {
-
+        fun onRssFeedLoaded(result: JokeModel.Result)
     }
 }

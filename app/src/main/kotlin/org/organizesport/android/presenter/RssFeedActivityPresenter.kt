@@ -2,6 +2,7 @@ package org.organizesport.android.presenter
 
 import android.util.Log
 import org.organizesport.android.RssFeedContract
+import org.organizesport.android.entity.JokeModel
 import org.organizesport.android.interactor.RssFeedActivityInteractor
 
 /**
@@ -22,6 +23,12 @@ class RssFeedActivityPresenter(private var view: RssFeedContract.View?) : RssFee
     override fun onViewCreated(data: Map<*, *>?) {
         Log.d(TAG, "Data: $data")
         interactor?.loadRssFeed(data?.keys)
+    }
+
+    override fun onRssFeedLoaded(result: JokeModel.Result) {
+        Log.d(TAG, "Result list size = ${result.jokes.size}")
+        view?.hideLoading()
+        view?.publishListData(result.jokes)
     }
 
     override fun onDestroy() {

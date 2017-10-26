@@ -1,8 +1,14 @@
 package org.organizesport.android.interactor
 
 import android.content.Context
+import android.util.Log
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import org.organizesport.android.BaseApplication
 import org.organizesport.android.RssFeedContract
+import org.organizesport.android.utils.retrofit2.JokesAPIService
+import org.organizesport.android.utils.retrofit2.Retrofit2Client
 import javax.inject.Inject
 
 /**
@@ -20,6 +26,8 @@ class RssFeedActivityInteractor(private var output: RssFeedContract.InteractorOu
 
     @Inject
     lateinit var context: Context
+    private val jokesAPIService: JokesAPIService by lazy { Retrofit2Client.create("https://api.icndb.com/") }
+    private var disposable: Disposable? = null
 
     // Inject Dagger 2 dependencies
     init {
@@ -27,7 +35,14 @@ class RssFeedActivityInteractor(private var output: RssFeedContract.InteractorOu
     }
 
     override fun loadRssFeed(sports: Set<Any?>?) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        disposable = jokesAPIService.loadSports()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { result -> output?.onRssFeedLoaded(result) },
+                        { error -> Log.d(TAG, "error: $error") }
+                )
     }
 
     override fun unregister() {
