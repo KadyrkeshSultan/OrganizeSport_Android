@@ -1,6 +1,7 @@
 package org.organizesport.android.presenter
 
 import android.util.Log
+
 import org.organizesport.android.RssFeedContract
 import org.organizesport.android.entity.JokeModel
 import org.organizesport.android.interactor.RssFeedActivityInteractor
@@ -13,6 +14,10 @@ import org.organizesport.android.interactor.RssFeedActivityInteractor
  * @since 1.0
  */
 class RssFeedActivityPresenter(private var view: RssFeedContract.View?) : RssFeedContract.Presenter, RssFeedContract.InteractorOutput {
+    override fun noNetworkAccess() {
+        view?.hideLoading()
+        view?.showInfoMessage("No network access")
+    }
 
     private companion object {
         val TAG: String = "RssFeedPresenter"
@@ -20,13 +25,13 @@ class RssFeedActivityPresenter(private var view: RssFeedContract.View?) : RssFee
 
     private var interactor: RssFeedActivityInteractor? = RssFeedActivityInteractor(this)
 
-    override fun onViewCreated(data: Map<*, *>?) {
+    override fun onViewCreated(data: List<*>) {
         Log.d(TAG, "Data: $data")
-        interactor?.loadRssFeed(data?.keys)
+        interactor?.loadRssFeed(data.size.toString())
     }
 
     override fun onRssFeedLoaded(result: JokeModel.Result) {
-        Log.d(TAG, "Result list size = ${result.jokes.size}")
+        Log.d(TAG, "Joke result id = ${result.jokes.id}")
         view?.hideLoading()
         view?.publishListData(result.jokes)
     }

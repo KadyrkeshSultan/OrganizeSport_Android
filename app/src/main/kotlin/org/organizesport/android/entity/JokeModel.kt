@@ -11,6 +11,6 @@ import com.google.gson.annotations.SerializedName
  * @since 1.0
  */
 object JokeModel {
-    data class Result(@SerializedName("value") val jokes: List<Jokes>)
-    data class Jokes(val id: Int, val text: String)
+    data class Result(@SerializedName("value") val jokes: Joke)
+    data class Joke(val id: Int, @SerializedName("joke") val text: String)
 }

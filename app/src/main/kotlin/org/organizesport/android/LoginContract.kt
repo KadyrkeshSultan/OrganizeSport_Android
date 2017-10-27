@@ -36,8 +36,8 @@ interface LoginContract {
     interface InteractorOutput {
         fun onLoginSuccess()
         fun onLoginError()
-        fun noNetworkAccess()
         fun onRegisterError()
         fun onRegisterSuccess()
+        fun noNetworkAccess()
     }
 }

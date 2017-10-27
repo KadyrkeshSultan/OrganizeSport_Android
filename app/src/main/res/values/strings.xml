@@ -16,4 +16,5 @@
     <!-- list_view_custom_layout -->
     <string name="tv_dummy_text">Lorem ipsum</string>
     <string name="tv_preferable_sport_icon_text">Preferable sport icon</string>
+    <string name="tv_empty_text" />
 </resources>

@@ -24,7 +24,7 @@ class SportsListActivityPresenter(private var view: SportsListContract.View?) : 
     private var interactor: SportsListContract.Interactor? = SportsListActivityInteractor(this)
     private val router: Router? by lazy { BaseApplication.INSTANCE.cicerone.router }
 
-    override fun onActivityCreated() {
+    override fun onViewCreated() {
         view?.showLoading()
         interactor?.loadSportsList()
     }

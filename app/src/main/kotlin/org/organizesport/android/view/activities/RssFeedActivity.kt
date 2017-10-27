@@ -2,8 +2,14 @@ package org.organizesport.android.view.activities
 
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
+import android.text.Html
 import android.util.Log
+import android.widget.TextView
+import kotlinx.android.synthetic.main.activity_rss_feed.*
+
 import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
+
+import org.jetbrains.anko.toast
 import org.organizesport.android.view.BaseActivity
 import org.organizesport.android.R
 import org.organizesport.android.RssFeedContract
@@ -26,7 +32,9 @@ class RssFeedActivity : BaseActivity(), RssFeedContract.View {
     }
 
     private var presenter: RssFeedContract.Presenter? = null
-    private val toolbar: Toolbar by lazy { toolbar_toolbar_view }
+    private val toolbar: Toolbar? by lazy { toolbar_toolbar_view }
+    private val tvId: TextView? by lazy { tv_id_activity_rss_feed }
+    private val tvJoke: TextView? by lazy { tv_joke_activity_rss_feed }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,11 +45,18 @@ class RssFeedActivity : BaseActivity(), RssFeedContract.View {
 
     override fun onResume() {
         super.onResume()
-        presenter?.onViewCreated(intent.getSerializableExtra("data")?.let { it as HashMap<*, *> })
+        val argument = intent.getSerializableExtra("data") as Map<String, Boolean>?
+        argument?.let { presenter?.onViewCreated(it.filter { it.value }.map { it.key }) }
     }
 
-    override fun publishListData(jokes: List<JokeModel.Jokes>) {
-        Log.d(TAG, "publishListData")
+    override fun publishListData(joke: JokeModel.Joke) {
+        Log.d(TAG, "publishListData: ${joke.id}, ${joke.text}")
+        tvId?.text = joke.id.toString()
+        tvJoke?.text = Html.fromHtml(joke.text)
+    }
+
+    override fun showInfoMessage(msg: String) {
+        toast(msg)
     }
 
     override fun showLoading() {

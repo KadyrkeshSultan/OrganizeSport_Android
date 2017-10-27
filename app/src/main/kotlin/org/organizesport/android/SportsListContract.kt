@@ -19,7 +19,7 @@ interface SportsListContract {
         fun listItemClicked(sport: String?)
         fun fabClicked(dataMap: Map<String, Boolean>?)
         // Model updates
-        fun onActivityCreated()
+        fun onViewCreated()
         fun onDestroy()
     }
 

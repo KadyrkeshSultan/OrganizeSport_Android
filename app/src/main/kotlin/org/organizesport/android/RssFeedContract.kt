@@ -10,24 +10,24 @@ import org.organizesport.android.entity.JokeModel
  */
 interface RssFeedContract {
     interface View {
-        fun publishListData(jokes: List<JokeModel.Jokes>)
+        fun publishListData(joke: JokeModel.Joke)
         fun showLoading()
         fun hideLoading()
+        fun showInfoMessage(msg: String)
     }
 
     interface Presenter {
-        fun onViewCreated(data: Map<*, *>?)
+        fun onViewCreated(data: List<*>)
         fun onDestroy()
-
     }
 
     interface Interactor {
-
+        fun loadRssFeed(jokeId: String)
         fun unregister()
-        fun loadRssFeed(sports: Set<Any?>?)
     }
 
     interface InteractorOutput {
         fun onRssFeedLoaded(result: JokeModel.Result)
+        fun noNetworkAccess()
     }
 }

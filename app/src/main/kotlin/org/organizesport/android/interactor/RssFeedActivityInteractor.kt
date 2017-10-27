@@ -2,13 +2,17 @@ package org.organizesport.android.interactor
 
 import android.content.Context
 import android.util.Log
+
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
+
 import org.organizesport.android.BaseApplication
 import org.organizesport.android.RssFeedContract
+import org.organizesport.android.utils.isNetworkConnected
 import org.organizesport.android.utils.retrofit2.JokesAPIService
 import org.organizesport.android.utils.retrofit2.Retrofit2Client
+
 import javax.inject.Inject
 
 /**
@@ -34,15 +38,19 @@ class RssFeedActivityInteractor(private var output: RssFeedContract.InteractorOu
         BaseApplication.INSTANCE.getModelComponent().injectDependency(this)
     }
 
-    override fun loadRssFeed(sports: Set<Any?>?) {
-
-        disposable = jokesAPIService.loadSports()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { result -> output?.onRssFeedLoaded(result) },
-                        { error -> Log.d(TAG, "error: $error") }
-                )
+    override fun loadRssFeed(jokeId: String) {
+        if (isNetworkConnected(context)) {
+            disposable = jokesAPIService.loadSports(jokeId)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(
+                            { result -> output?.onRssFeedLoaded(result) },
+//                        { result -> Log.d(TAG, "data: $result") },
+                            { error -> Log.w(TAG, "error: $error") }
+                    )
+        } else {
+            output?.noNetworkAccess()
+        }
     }
 
     override fun unregister() {

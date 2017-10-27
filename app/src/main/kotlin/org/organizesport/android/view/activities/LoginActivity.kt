@@ -88,7 +88,6 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         BaseApplication.INSTANCE.cicerone.navigatorHolder.removeNavigator()
     }
 
-
     override fun showLoginUi() {
         Log.d(TAG, "In-showLoginUi()")
         tvTitle?.text = this.getString(R.string.tv_login_text)

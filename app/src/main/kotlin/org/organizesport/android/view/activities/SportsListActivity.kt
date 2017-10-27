@@ -50,8 +50,7 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
             }
 
             private fun forward(command: Forward) {
-
-                val data = (command.transitionData as Map<*, *>).filter { it.value == true }
+                val data = (command.transitionData as Map<*, *>)
 
                 when (command.screenKey) {
                     RssFeedActivity.TAG -> startActivity(Intent(this@SportsListActivity, RssFeedActivity::class.java)
@@ -91,7 +90,7 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
         lvSportsList?.emptyView = tvNoData   // 'View' to be shown when no data is available
         lvSportsList?.adapter = adapter
 
-        presenter?.onActivityCreated()
+        presenter?.onViewCreated()
     }
 
     override fun onResume() {
