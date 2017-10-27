@@ -2,7 +2,11 @@ apply plugin: 'com.android.application'
 // Applies the Kotlin Android plugin
 apply plugin: 'kotlin-android'
 // Applies Kotlin extensions plugin
-apply plugin: 'kotlin-android-extensions'   // Allows to import 'View' objects
+apply plugin: 'kotlin-android-extensions'   // Allows to import 'View' objects (no more findViewB...)
+// Applies Kotlin documentation plugin
+apply plugin: 'org.jetbrains.dokka'
+// Applies Kotlin Annotation Processing Tool (for Dagger2)
+apply plugin: 'kotlin-kapt'
 
 // Gets current date in a specific format (e.g.: #Tue Apr 18 09:36:31 CEST 2017)
 def getDate() {
@@ -79,12 +83,19 @@ android {
         }
     }
     // Although Gradle will compile any Kotlin files it finds in 'src/main/java', it's good practice
-    // to store your Kotlin files in a dedicated Kotlin directory. Here, you can see that the Kotlin
-    // plugin has added a 'src/main/kotlin' declaration to build.gradle, but note that it has not
-    // actually created this directory, so we will create it ourselves later in this article
+    // to store your Kotlin files in a dedicated Kotlin directory. Here, the Kotlin plugin has added
+    // a 'src/main/kotlin', a 'src/test/kotlin', and a 'src/androidTest/kotlin' declaration to
+    // build.gradle.
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        test.java.srcDirs += 'src/test/kotlin'
+        androidTest.java.srcDirs += 'src/androidTest/kotlin'
     }
+}
+
+dokka {
+    outputFormat = 'html'
+    outputDirectory = "$buildDir/javadoc"
 }
 
 dependencies {
@@ -94,14 +105,37 @@ dependencies {
     })
     compile "com.android.support:appcompat-v7:$rootProject.ext.supportLibraryVersion"
     compile "com.android.support:support-v4:$rootProject.ext.supportLibraryVersion"
+    // Including Kotlin and Anko
     compile "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.ext.kotlinVersion"
+    compile "org.jetbrains.anko:anko:$rootProject.ext.ankoVersion"
     // Some more Material Design explicit dependencies
     compile "com.android.support:design:$rootProject.ext.supportLibraryVersion"
     compile "com.android.support.constraint:constraint-layout:$rootProject.ext.constraintLayoutVersion"
-    // Required -- JUnit 4 framework
+    // Including Firebase authentication API
+    compile "com.google.firebase:firebase-core:$rootProject.ext.firebaseVersion"
+    compile "com.google.firebase:firebase-auth:$rootProject.ext.firebaseVersion"
+    compile "com.google.firebase:firebase-database:$rootProject.ext.firebaseVersion"
+    // Including RxJava 2 and RxKotlin
+    compile "io.reactivex.rxjava2:rxjava:$rootProject.ext.rxJavaVersion"
+    compile "io.reactivex.rxjava2:rxkotlin:$rootProject.ext.rxKotlinVersion"
+    // Including 3rd party libraries (RxBinding, and Cicerone)
+    compile "com.jakewharton.rxbinding2:rxbinding-kotlin:$rootProject.ext.rxBindingVersion"
+    compile "ru.terrakok.cicerone:cicerone:$rootProject.ext.ciceroneVersion"
+    // Retrofit 2
+    compile "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofit2Version"
+    compile "com.squareup.retrofit2:adapter-rxjava2:$rootProject.ext.retrofit2Version"
+    compile "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit2Version"  // JSON converter
+    // Including Dagger 2
+    kapt "com.google.dagger:dagger-compiler:$rootProject.ext.dagger2Version"
+    compile "com.google.dagger:dagger:$rootProject.ext.dagger2Version"
+    // Required -- JUnit 4 framework and Kotlin for testing
     testCompile "junit:junit:$rootProject.ext.junitVersion"
+    testCompile "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.ext.kotlinVersion"
+    testCompile "org.jetbrains.kotlin:kotlin-test-junit:$rootProject.ext.kotlinVersion"
     // Optional -- LeakCanary
     debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.leakcanaryVersion"
+    // No-Op version of LeakCanary for release builds: no notifications, no analysis,...
+    releaseCompile "com.squareup.leakcanary:leakcanary-android-no-op:$rootProject.ext.leakcanaryVersion"
 }
 
 apply plugin: 'com.google.gms.google-services'

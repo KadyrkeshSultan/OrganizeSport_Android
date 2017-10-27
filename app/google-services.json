@@ -1,0 +1,164 @@
+{
+  "project_info": {
+    "project_number": "1060858310779",
+    "firebase_url": "https://organizesport.firebaseio.com",
+    "project_id": "organizesport",
+    "storage_bucket": "organizesport.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1060858310779:android:94341d572d57d8a2",
+        "android_client_info": {
+          "package_name": "org.organizesport.android"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1060858310779-a6nlj5m8h8mfik617i5ok585hlbep8dj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.organizesport.android",
+            "certificate_hash": "79c158ceedb833af77ece82d4b9e7b8b92841d54"
+          }
+        },
+        {
+          "client_id": "1060858310779-dh4t76ambi20bcikc6bpl0jh202ja5u2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnoXbNBVdWA6-ZcO6Q-CL2qwWovLEWA7o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1060858310779-qsn4ll4utbnhm4gukq6nb32ebsbe6crf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aarjonillaInk.OrganizerSport"
+              }
+            },
+            {
+              "client_id": "1060858310779-dh4t76ambi20bcikc6bpl0jh202ja5u2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1060858310779:android:5cee1849be144fec",
+        "android_client_info": {
+          "package_name": "org.organizesport.android.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1060858310779-28cr34vmts6pl5bjkknj5t7iliosqrn4.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.organizesport.android.dev",
+            "certificate_hash": "79c158ceedb833af77ece82d4b9e7b8b92841d54"
+          }
+        },
+        {
+          "client_id": "1060858310779-dh4t76ambi20bcikc6bpl0jh202ja5u2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnoXbNBVdWA6-ZcO6Q-CL2qwWovLEWA7o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1060858310779-qsn4ll4utbnhm4gukq6nb32ebsbe6crf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aarjonillaInk.OrganizerSport"
+              }
+            },
+            {
+              "client_id": "1060858310779-dh4t76ambi20bcikc6bpl0jh202ja5u2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1060858310779:android:7182e5e23ad9fea7",
+        "android_client_info": {
+          "package_name": "org.organizesport.android.beta"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1060858310779-6dui5pgoq5vr4e7aii814av7c217ns91.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.organizesport.android.beta",
+            "certificate_hash": "79c158ceedb833af77ece82d4b9e7b8b92841d54"
+          }
+        },
+        {
+          "client_id": "1060858310779-dh4t76ambi20bcikc6bpl0jh202ja5u2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnoXbNBVdWA6-ZcO6Q-CL2qwWovLEWA7o"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1060858310779-qsn4ll4utbnhm4gukq6nb32ebsbe6crf.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.aarjonillaInk.OrganizerSport"
+              }
+            },
+            {
+              "client_id": "1060858310779-dh4t76ambi20bcikc6bpl0jh202ja5u2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
