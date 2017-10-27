@@ -31,6 +31,11 @@ abstract class BaseActivity : AppCompatActivity() {
     private fun initView(toolbar: Toolbar) {
         // Toolbar setup
         setSupportActionBar(toolbar)   // Replaces the 'ActionBar' with the 'Toolbar'
+        // add back arrow to toolbar
+        supportActionBar?.let {
+            it.setDefaultDisplayHomeAsUpEnabled(true)
+            it.setDisplayShowHomeEnabled(true)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
