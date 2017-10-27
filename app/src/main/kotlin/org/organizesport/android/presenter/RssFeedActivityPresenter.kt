@@ -25,9 +25,9 @@ class RssFeedActivityPresenter(private var view: RssFeedContract.View?) : RssFee
 
     private var interactor: RssFeedActivityInteractor? = RssFeedActivityInteractor(this)
 
-    override fun onViewCreated(data: List<*>) {
+    override fun onViewCreated(data: Map<*, *>) {
         Log.d(TAG, "Data: $data")
-        interactor?.loadRssFeed(data.size.toString())
+        interactor?.loadRssFeed(data.keys.size.toString())
     }
 
     override fun onRssFeedLoaded(result: JokeModel.Result) {

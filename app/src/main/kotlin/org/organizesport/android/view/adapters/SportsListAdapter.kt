@@ -9,6 +9,7 @@ import android.widget.TextView
 import android.widget.ImageButton
 import org.jetbrains.anko.find
 import org.organizesport.android.R
+import org.organizesport.android.entity.Sport
 
 /**
  * This class refers to the 'SportsListActivity' View, following the MVP architectural pattern.
@@ -19,7 +20,7 @@ import org.organizesport.android.R
  * @author pablol.
  * @since 1.0
  */
-class SportsListAdapter(private val ctx: Context, private val resource: Int, private var dataMap: Map<String, Boolean>) : BaseAdapter() {
+class SportsListAdapter(private val ctx: Context, private val resource: Int, private var dataMap: Map<Sport, Boolean>) : BaseAdapter() {
 
     // Creating a ViewHolder to speed up the performance
     private class ViewHolder {
@@ -44,7 +45,7 @@ class SportsListAdapter(private val ctx: Context, private val resource: Int, pri
         }
 
         // 'viewHolder' can be now populated
-        viewHolder.tvSport?.text = dataMap.keys.elementAt(position)
+        viewHolder.tvSport?.text = dataMap.keys.elementAt(position).name
         viewHolder.imgBtnSelectedSport?.isSelected = dataMap.values.elementAt(position)
 
         return convertView
@@ -58,10 +59,10 @@ class SportsListAdapter(private val ctx: Context, private val resource: Int, pri
 
     override fun getCount(): Int = dataMap.size
 
-    fun updateData(map: Map<String, Boolean>) {
+    fun updateData(map: Map<Sport, Boolean>) {
         dataMap = map
         this.notifyDataSetChanged()
     }
 
-    fun getDataMap(): Map<String, Boolean> = dataMap
+    fun getDataMap(): Map<Sport, Boolean> = dataMap
 }

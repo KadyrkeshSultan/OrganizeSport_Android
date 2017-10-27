@@ -2,14 +2,18 @@ package org.organizesport.android.interactor
 
 import android.content.Context
 import android.util.Log
+
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
-import org.organizesport.android.SportsListContract
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
+
 import org.organizesport.android.BaseApplication
+import org.organizesport.android.entity.Sport
+import org.organizesport.android.SportsListContract
 import org.organizesport.android.utils.isNetworkConnected
+
 import javax.inject.Inject
 
 /**
@@ -35,7 +39,7 @@ class SportsListActivityInteractor(private var output: SportsListContract.Intera
             Log.d(TAG, "sportsListListener, load:onSuccess")
             val list = mutableListOf<String>()
             dataSnapshot.children.mapNotNullTo(list) { it.value as String }
-            output?.onSportsListLoaded(list)
+            output?.onSportsListLoaded(list.map { Sport(it) })
         }
 
         override fun onCancelled(databaseError: DatabaseError) {
@@ -47,14 +51,17 @@ class SportsListActivityInteractor(private var output: SportsListContract.Intera
         override fun onDataChange(dataSnapshot: DataSnapshot) {
             Log.d(TAG, "userSportsListListener, load:onSuccess")
             val list = mutableListOf<String>()
-            dataSnapshot.children.mapNotNullTo(list) { it.value as String }
+            val sportList = dataSnapshot.children.mapNotNullTo(list) { it.value as String }
+                    .map { Sport(it) }
+                    .toMutableList()
+
             if (data != null) {
-                if (!list.remove(data!!)) {
-                    list.add(data!!)
+                if (!sportList.remove(Sport(data!!))) {
+                    sportList.add(Sport(data!!))
                 }
                 data = null
             }
-            output?.onUserSportsListLoaded(list)
+            output?.onUserSportsListLoaded(sportList)
         }
 
         override fun onCancelled(databaseError: DatabaseError) {
@@ -86,9 +93,9 @@ class SportsListActivityInteractor(private var output: SportsListContract.Intera
         }
     }
 
-    override fun updateUserData(dataKey: String, data: List<String>) {
+    override fun updateUserData(dataKey: String, data: List<Sport>) {
         if (isNetworkConnected(context)) {
-            fbDatabase.child("users").child(fbAuth?.currentUser?.uid).child(dataKey).setValue(data)
+            fbDatabase.child("users").child(fbAuth?.currentUser?.uid).child(dataKey).setValue(data.map { it.name })
         } else {
             output?.noNetworkAccess()
         }

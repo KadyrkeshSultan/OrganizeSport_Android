@@ -18,6 +18,7 @@ import org.organizesport.android.view.BaseActivity
 import org.organizesport.android.BaseApplication
 import org.organizesport.android.R
 import org.organizesport.android.SportsListContract
+import org.organizesport.android.entity.Sport
 import org.organizesport.android.presenter.SportsListActivityPresenter
 import org.organizesport.android.utils.addClickAction
 import org.organizesport.android.view.adapters.SportsListAdapter
@@ -85,7 +86,7 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
 
         lvSportsList?.setOnItemClickListener { _, _, position, _ ->
             Log.d(TAG, "item clicked")
-            presenter?.listItemClicked(adapter?.getItem(position)?.keys?.elementAt(0))
+            presenter?.listItemClicked(adapter?.getItem(position)?.keys?.elementAt(0)?.name)
         }
         lvSportsList?.emptyView = tvNoData   // 'View' to be shown when no data is available
         lvSportsList?.adapter = adapter
@@ -109,7 +110,7 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
         toast(msg)
     }
 
-    override fun publishListData(map: Map<String, Boolean>) {
+    override fun publishListData(map: Map<Sport, Boolean>) {
         adapter?.updateData(map)
     }
 

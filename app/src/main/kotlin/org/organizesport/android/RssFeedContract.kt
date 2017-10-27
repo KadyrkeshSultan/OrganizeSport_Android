@@ -17,7 +17,7 @@ interface RssFeedContract {
     }
 
     interface Presenter {
-        fun onViewCreated(data: List<*>)
+        fun onViewCreated(data: Map<*, *>)
         fun onDestroy()
     }
 

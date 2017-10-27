@@ -14,6 +14,7 @@ import org.organizesport.android.view.BaseActivity
 import org.organizesport.android.R
 import org.organizesport.android.RssFeedContract
 import org.organizesport.android.entity.JokeModel
+import org.organizesport.android.entity.Sport
 import org.organizesport.android.presenter.RssFeedActivityPresenter
 
 /**
@@ -45,8 +46,9 @@ class RssFeedActivity : BaseActivity(), RssFeedContract.View {
 
     override fun onResume() {
         super.onResume()
-        val argument = intent.getSerializableExtra("data") as Map<String, Boolean>?
-        argument?.let { presenter?.onViewCreated(it.filter { it.value }.map { it.key }) }
+        val argument = intent.getSerializableExtra("data") as Map<Sport, Boolean>?
+        // Passing only those entries whose 'value' is true
+        argument?.let { presenter?.onViewCreated(it.filter { it.value }) }
     }
 
     override fun publishListData(joke: JokeModel.Joke) {
