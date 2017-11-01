@@ -14,9 +14,9 @@ before_install:
 android:
  components:
  - tools
- - build-tools-25.0.2
+ - build-tools-26.0.2
  - platform-tools
- - android-25
+ - android-26
  - extra-google-m2repository
  - extra-android-m2repository # for design library
  - addon-google_apis-google-19 # google play services
