@@ -21,7 +21,6 @@ class SportsListActivityPresenter(private var view: SportsListContract.View?) : 
         private val TAG: String = "SportsListPresenter"
     }
 
-    private lateinit var availableSportsList: List<Sport>
     private var interactor: SportsListContract.Interactor? = SportsListActivityInteractor(this)
     private val router: Router? by lazy { BaseApplication.INSTANCE.cicerone.router }
 
@@ -30,30 +29,18 @@ class SportsListActivityPresenter(private var view: SportsListContract.View?) : 
         interactor?.loadSportsList()
     }
 
-    override fun onSportsListLoaded(list: List<Sport>) {
-        availableSportsList = list
-        interactor?.loadUserSportsList()
-    }
-
-    override fun onUserSportsListLoaded(list: List<Sport>) {
-        val map = availableSportsList.associateBy({ it }, { list.contains(it) })
-        interactor?.updateUserData("sports", list)
+    override fun onSportsListLoaded(map: Map<Sport, Boolean>) {
         view?.hideLoading()
         view?.publishListData(map)
     }
 
     override fun listItemClicked(sport: String?) {
         view?.showLoading()
-        interactor?.queryUserData("sports", sport)
+        interactor?.updateUserData("sports", sport)
     }
 
     override fun fabClicked(dataMap: Map<Sport, Boolean>?) {
         router?.navigateTo(RssFeedActivity.TAG, dataMap)
-    }
-
-    override fun onQueryResult(list: List<Sport>) {
-        view?.hideLoading()
-        interactor?.updateUserData("sports", list)
     }
 
     override fun noNetworkAccess() {

@@ -22,6 +22,7 @@ import org.organizesport.android.entity.Sport
 import org.organizesport.android.presenter.SportsListActivityPresenter
 import org.organizesport.android.utils.addClickAction
 import org.organizesport.android.view.adapters.SportsListAdapter
+
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.commands.Command
 import ru.terrakok.cicerone.commands.Forward
@@ -122,6 +123,11 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
     override fun hideLoading() {
         progressBar?.visibility = View.GONE
         lvSportsList?.isEnabled = true
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 
     override fun onDestroy() {

@@ -27,17 +27,12 @@ interface SportsListContract {
 
     interface Interactor {
         fun loadSportsList()
-        fun loadUserSportsList()
-        fun queryUserData(dataKey: String, newData: String?)
-        fun updateUserData(dataKey: String, data: List<Sport>)
+        fun updateUserData(dataKey: String, sport: String?)
         fun unregister()
     }
 
     interface InteractorOutput {
-//        fun onSportsListLoaded(list: List<String>)
-        fun onSportsListLoaded(list: List<Sport>)
-        fun onUserSportsListLoaded(list: List<Sport>)
-        fun onQueryResult(list: List<Sport>)
+        fun onSportsListLoaded(map: Map<Sport, Boolean>)
         fun noNetworkAccess()
         fun onDataError()
     }

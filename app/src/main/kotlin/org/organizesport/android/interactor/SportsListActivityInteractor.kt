@@ -9,6 +9,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.ValueEventListener
 
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.BiFunction
+import io.reactivex.schedulers.Schedulers
+
 import org.organizesport.android.BaseApplication
 import org.organizesport.android.entity.Sport
 import org.organizesport.android.SportsListContract
@@ -33,42 +38,6 @@ class SportsListActivityInteractor(private var output: SportsListContract.Intera
     lateinit var context: Context
     private val fbAuth: FirebaseAuth? by lazy { FirebaseAuth.getInstance() }
     private val fbDatabase: DatabaseReference by lazy { FirebaseDatabase.getInstance().reference }
-    private var data: String? = null
-    private val sportsListListener = object : ValueEventListener {
-        override fun onDataChange(dataSnapshot: DataSnapshot) {
-            Log.d(TAG, "sportsListListener, load:onSuccess")
-            val list = mutableListOf<String>()
-            dataSnapshot.children.mapNotNullTo(list) { it.value as String }
-            output?.onSportsListLoaded(list.map { Sport(it) })
-        }
-
-        override fun onCancelled(databaseError: DatabaseError) {
-            Log.w(TAG, "loadPost:onCancelled ${databaseError.toException()}")
-            output?.onDataError()
-        }
-    }
-    private val userSportsListListener = object : ValueEventListener {
-        override fun onDataChange(dataSnapshot: DataSnapshot) {
-            Log.d(TAG, "userSportsListListener, load:onSuccess")
-            val list = mutableListOf<String>()
-            val sportList = dataSnapshot.children.mapNotNullTo(list) { it.value as String }
-                    .map { Sport(it) }
-                    .toMutableList()
-
-            if (data != null) {
-                if (!sportList.remove(Sport(data!!))) {
-                    sportList.add(Sport(data!!))
-                }
-                data = null
-            }
-            output?.onUserSportsListLoaded(sportList)
-        }
-
-        override fun onCancelled(databaseError: DatabaseError) {
-            Log.w(TAG, "loadPost:onCancelled ${databaseError.toException()}")
-            output?.onDataError()
-        }
-    }
 
     // Inject Dagger 2 dependencies
     init {
@@ -76,26 +45,20 @@ class SportsListActivityInteractor(private var output: SportsListContract.Intera
     }
 
     override fun loadSportsList() {
-        this.fetchData("sports", sportsListListener)
+        this.fetchData()
     }
 
-    override fun loadUserSportsList() {
-        this.fetchData("users/${fbAuth?.currentUser?.uid}/sports", userSportsListListener)
-    }
-
-    override fun queryUserData(dataKey: String, newData: String?) {
+    override fun updateUserData(dataKey: String, sport: String?) {
         if (isNetworkConnected(context)) {
-            data = newData
-            fbDatabase.child("users").child(fbAuth?.currentUser?.uid).child(dataKey)
-                    .addListenerForSingleValueEvent(userSportsListListener)
-        } else {
-            output?.noNetworkAccess()
-        }
-    }
-
-    override fun updateUserData(dataKey: String, data: List<Sport>) {
-        if (isNetworkConnected(context)) {
-            fbDatabase.child("users").child(fbAuth?.currentUser?.uid).child(dataKey).setValue(data.map { it.name })
+            getFirebaseDataList("users/${fbAuth?.currentUser?.uid}/$dataKey")
+                    .subscribe({
+                        if (it is MutableList<Sport> && !it.remove(Sport(sport!!))) {
+                            it.add(Sport(sport))
+                        }
+                        fbDatabase.child("users").child(fbAuth?.currentUser?.uid).child(dataKey)
+                                .setValue(it.map { it.name })
+                        this.fetchData()
+                    }, { output?.noNetworkAccess() })
         } else {
             output?.noNetworkAccess()
         }
@@ -105,11 +68,36 @@ class SportsListActivityInteractor(private var output: SportsListContract.Intera
         output = null
     }
 
-    private fun fetchData(dataKey: String, listener: ValueEventListener) {
+    private fun fetchData() {
         if (isNetworkConnected(context)) {
-            fbDatabase.child(dataKey).addValueEventListener(listener)
+            Single.zip(
+                    getFirebaseDataList("sports"),
+                    getFirebaseDataList("users/${fbAuth?.currentUser?.uid}/sports"),
+                    BiFunction<List<Sport>, List<Sport>, Unit> { e1, e2 ->
+                        output?.onSportsListLoaded(e1.map { it to e2.contains(it) }.toMap())
+                    }).subscribe()
         } else {
             output?.noNetworkAccess()
         }
     }
+
+    private fun getFirebaseDataList(dataKey: String) = Single.create<List<Sport>> { emitter ->
+        fbDatabase.child(dataKey).addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                Log.d(TAG, "userSportsListListener, load:onSuccess")
+                val list = mutableListOf<String>()
+                emitter.onSuccess(
+                        dataSnapshot.children.mapNotNullTo(list) { it.value as String }
+                                .map { Sport(it) }
+                                .toMutableList()
+                )
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w(TAG, "loadPost:onCancelled ${databaseError.toException()}")
+                output?.onDataError()
+            }
+        })
+    }.subscribeOn(Schedulers.newThread())
+            .observeOn(AndroidSchedulers.mainThread())
 }

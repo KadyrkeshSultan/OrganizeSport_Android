@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.text.Html
 import android.util.Log
+import android.view.MenuItem
 import android.widget.TextView
-import kotlinx.android.synthetic.main.activity_rss_feed.*
 
+import kotlinx.android.synthetic.main.activity_rss_feed.*
 import kotlinx.android.synthetic.main.toolbar_view_custom_layout.*
 
 import org.jetbrains.anko.toast
@@ -46,6 +47,11 @@ class RssFeedActivity : BaseActivity(), RssFeedContract.View {
 
     override fun onResume() {
         super.onResume()
+        // add back arrow to toolbar
+        supportActionBar?.let {
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        }
+        // load invoking arguments
         val argument = intent.getSerializableExtra("data") as Map<Sport, Boolean>?
         // Passing only those entries whose 'value' is true
         argument?.let { presenter?.onViewCreated(it.filter { it.value }) }
@@ -61,10 +67,14 @@ class RssFeedActivity : BaseActivity(), RssFeedContract.View {
         toast(msg)
     }
 
-    override fun showLoading() {
-    }
-
-    override fun hideLoading() {
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        super.onOptionsItemSelected(item)
+        return if (item?.itemId == android.R.id.home) {
+            finish()
+            true
+        } else {
+            false
+        }
     }
 
     override fun onDestroy() {

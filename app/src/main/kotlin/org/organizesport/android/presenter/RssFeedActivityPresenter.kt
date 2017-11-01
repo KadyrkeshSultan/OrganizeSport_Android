@@ -14,10 +14,6 @@ import org.organizesport.android.interactor.RssFeedActivityInteractor
  * @since 1.0
  */
 class RssFeedActivityPresenter(private var view: RssFeedContract.View?) : RssFeedContract.Presenter, RssFeedContract.InteractorOutput {
-    override fun noNetworkAccess() {
-        view?.hideLoading()
-        view?.showInfoMessage("No network access")
-    }
 
     private companion object {
         val TAG: String = "RssFeedPresenter"
@@ -32,8 +28,15 @@ class RssFeedActivityPresenter(private var view: RssFeedContract.View?) : RssFee
 
     override fun onRssFeedLoaded(result: JokeModel.Result) {
         Log.d(TAG, "Joke result id = ${result.jokes.id}")
-        view?.hideLoading()
         view?.publishListData(result.jokes)
+    }
+
+    override fun onRssFeedError(error: String) {
+        view?.showInfoMessage(error)
+    }
+
+    override fun noNetworkAccess() {
+        view?.showInfoMessage("No network access")
     }
 
     override fun onDestroy() {

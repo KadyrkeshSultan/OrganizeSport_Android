@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import android.widget.ImageButton
+
 import org.jetbrains.anko.find
 import org.organizesport.android.R
 import org.organizesport.android.entity.Sport
