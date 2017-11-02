@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_sample.*
 
-import org.jetbrains.anko.longToast
 import org.organizesport.android.R
 
 /**
@@ -27,18 +26,5 @@ class SampleActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sample)
-
-
-//        this.firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task: Task<AuthResult> ->
-//            if (task.isSuccessful) {
-//                //Registration OK
-//                Log.d(TAG, "In-showLoginUi()")
-//                val firebaseUser = this.firebaseAuth.currentUser!!
-
-//            } else {
-//                //Registration error
-//            }
-//        }
-
     }
 }

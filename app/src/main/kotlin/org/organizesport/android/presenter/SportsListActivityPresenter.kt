@@ -1,10 +1,13 @@
 package org.organizesport.android.presenter
 
+import android.os.Bundle
+
 import org.organizesport.android.BaseApplication
 import org.organizesport.android.SportsListContract
 import org.organizesport.android.entity.Sport
 import org.organizesport.android.interactor.SportsListActivityInteractor
 import org.organizesport.android.view.activities.RssFeedActivity
+
 import ru.terrakok.cicerone.Router
 
 /**
@@ -27,6 +30,17 @@ class SportsListActivityPresenter(private var view: SportsListContract.View?) : 
     override fun onViewCreated() {
         view?.showLoading()
         interactor?.loadSportsList()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?, dataMap: Map<Sport, Boolean>?) {
+        outState?.putSerializable("data", dataMap as? HashMap<Sport, Boolean>)
+    }
+
+    override fun onRestoreInstanceState(inState: Bundle?) {
+        val data = inState?.get("data") as? Map<Sport, Boolean>
+        data?.let {
+            view?.publishListData(it)
+        }
     }
 
     override fun onSportsListLoaded(map: Map<Sport, Boolean>) {

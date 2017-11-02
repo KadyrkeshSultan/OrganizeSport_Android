@@ -21,7 +21,7 @@ import org.organizesport.android.entity.Sport
  * @author pablol.
  * @since 1.0
  */
-class SportsListAdapter(private val ctx: Context, private val resource: Int, private var dataMap: Map<Sport, Boolean>) : BaseAdapter() {
+open class SportsListAdapter(private val ctx: Context, private val resource: Int, private var dataMap: Map<Sport, Boolean>) : BaseAdapter() {
 
     // Creating a ViewHolder to speed up the performance
     private class ViewHolder {
@@ -60,10 +60,10 @@ class SportsListAdapter(private val ctx: Context, private val resource: Int, pri
 
     override fun getCount(): Int = dataMap.size
 
+    fun getDataMap(): Map<Sport, Boolean> = dataMap
+
     fun updateData(map: Map<Sport, Boolean>) {
-        dataMap = map
+        this.dataMap = map
         this.notifyDataSetChanged()
     }
-
-    fun getDataMap(): Map<Sport, Boolean> = dataMap
 }

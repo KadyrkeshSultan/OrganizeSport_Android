@@ -52,7 +52,7 @@ class RssFeedActivity : BaseActivity(), RssFeedContract.View {
             supportActionBar?.setDisplayHomeAsUpEnabled(true)
         }
         // load invoking arguments
-        val argument = intent.getSerializableExtra("data") as Map<Sport, Boolean>?
+        val argument = intent.getSerializableExtra("data") as? Map<Sport, Boolean>
         // Passing only those entries whose 'value' is true
         argument?.let { presenter?.onViewCreated(it.filter { it.value }) }
     }

@@ -1,5 +1,6 @@
 package org.organizesport.android
 
+import android.os.Bundle
 import org.organizesport.android.entity.Sport
 
 /**
@@ -22,6 +23,8 @@ interface SportsListContract {
         fun fabClicked(dataMap: Map<Sport, Boolean>?)
         // Model updates
         fun onViewCreated()
+        fun onSaveInstanceState(outState: Bundle?, dataMap: Map<Sport, Boolean>?)
+        fun onRestoreInstanceState(inState: Bundle?)
         fun onDestroy()
     }
 
