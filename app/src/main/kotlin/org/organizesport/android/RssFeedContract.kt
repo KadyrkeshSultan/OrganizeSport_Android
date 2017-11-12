@@ -11,13 +11,12 @@ import org.organizesport.android.entity.JokeModel
 interface RssFeedContract {
     interface View {
         fun publishListData(joke: JokeModel.Joke)
-        fun showLoading()
-        fun hideLoading()
         fun showInfoMessage(msg: String)
     }
 
     interface Presenter {
-        fun onViewCreated(data: List<*>)
+        // Model updates
+        fun onViewCreated(data: Map<*, *>)
         fun onDestroy()
     }
 
@@ -28,6 +27,7 @@ interface RssFeedContract {
 
     interface InteractorOutput {
         fun onRssFeedLoaded(result: JokeModel.Result)
+        fun onRssFeedError(error: String)
         fun noNetworkAccess()
     }
 }

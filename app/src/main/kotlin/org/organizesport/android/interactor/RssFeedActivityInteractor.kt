@@ -45,8 +45,10 @@ class RssFeedActivityInteractor(private var output: RssFeedContract.InteractorOu
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(
                             { result -> output?.onRssFeedLoaded(result) },
-//                        { result -> Log.d(TAG, "data: $result") },
-                            { error -> Log.w(TAG, "error: $error") }
+                            { error ->
+                                Log.w(TAG, "Error: ${error.message}")
+                                output?.onRssFeedError("Entry not found!")
+                            }
                     )
         } else {
             output?.noNetworkAccess()

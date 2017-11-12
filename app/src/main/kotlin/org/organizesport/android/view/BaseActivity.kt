@@ -5,6 +5,7 @@ import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+
 import org.organizesport.android.R
 
 /**
@@ -31,11 +32,6 @@ abstract class BaseActivity : AppCompatActivity() {
     private fun initView(toolbar: Toolbar) {
         // Toolbar setup
         setSupportActionBar(toolbar)   // Replaces the 'ActionBar' with the 'Toolbar'
-        // add back arrow to toolbar
-        supportActionBar?.let {
-            it.setDefaultDisplayHomeAsUpEnabled(true)
-            it.setDisplayShowHomeEnabled(true)
-        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

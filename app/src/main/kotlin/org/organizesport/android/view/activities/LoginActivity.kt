@@ -83,6 +83,16 @@ class LoginActivity : AppCompatActivity(), LoginContract.View {
         presenter?.onViewCreated()
     }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        presenter?.onSaveInstanceState(outState)
+    }
+
+    override fun onRestoreInstanceState(inState: Bundle?) {
+        super.onRestoreInstanceState(inState)
+        presenter?.onRestoreInstanceState(inState)
+    }
+
     override fun onPause() {
         super.onPause()
         BaseApplication.INSTANCE.cicerone.navigatorHolder.removeNavigator()

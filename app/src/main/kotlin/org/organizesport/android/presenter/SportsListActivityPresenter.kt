@@ -1,9 +1,13 @@
 package org.organizesport.android.presenter
 
+import android.os.Bundle
+
 import org.organizesport.android.BaseApplication
 import org.organizesport.android.SportsListContract
+import org.organizesport.android.entity.Sport
 import org.organizesport.android.interactor.SportsListActivityInteractor
 import org.organizesport.android.view.activities.RssFeedActivity
+
 import ru.terrakok.cicerone.Router
 
 /**
@@ -20,7 +24,6 @@ class SportsListActivityPresenter(private var view: SportsListContract.View?) : 
         private val TAG: String = "SportsListPresenter"
     }
 
-    private lateinit var availableSportsList: List<String>
     private var interactor: SportsListContract.Interactor? = SportsListActivityInteractor(this)
     private val router: Router? by lazy { BaseApplication.INSTANCE.cicerone.router }
 
@@ -29,30 +32,29 @@ class SportsListActivityPresenter(private var view: SportsListContract.View?) : 
         interactor?.loadSportsList()
     }
 
-    override fun onSportsListLoaded(list: List<String>) {
-        availableSportsList = list
-        interactor?.loadUserSportsList()
+    override fun onSaveInstanceState(outState: Bundle?, dataMap: Map<Sport, Boolean>?) {
+        outState?.putSerializable("data", dataMap as? HashMap<Sport, Boolean>)
     }
 
-    override fun onUserSportsListLoaded(list: List<String>) {
-        val map = availableSportsList.associateBy({it}, {list.contains(it)})
-        interactor?.updateUserData("sports", list)
+    override fun onRestoreInstanceState(inState: Bundle?) {
+        val data = inState?.get("data") as? Map<Sport, Boolean>
+        data?.let {
+            view?.publishListData(it)
+        }
+    }
+
+    override fun onSportsListLoaded(map: Map<Sport, Boolean>) {
         view?.hideLoading()
         view?.publishListData(map)
     }
 
     override fun listItemClicked(sport: String?) {
         view?.showLoading()
-        interactor?.queryUserData("sports", sport)
+        interactor?.updateUserData("sports", sport)
     }
 
-    override fun fabClicked(dataMap: Map<String, Boolean>?) {
+    override fun fabClicked(dataMap: Map<Sport, Boolean>?) {
         router?.navigateTo(RssFeedActivity.TAG, dataMap)
-    }
-
-    override fun onQueryResult(list: List<String>) {
-        view?.hideLoading()
-        interactor?.updateUserData("sports", list)
     }
 
     override fun noNetworkAccess() {

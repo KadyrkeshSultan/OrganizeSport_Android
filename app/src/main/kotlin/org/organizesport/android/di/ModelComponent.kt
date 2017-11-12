@@ -1,6 +1,9 @@
 package org.organizesport.android.di
 
+import android.content.Context
 import dagger.Component
+import dagger.android.AndroidInjectionModule
+import org.organizesport.android.BaseApplication
 import org.organizesport.android.interactor.LoginActivityInteractor
 import org.organizesport.android.interactor.RssFeedActivityInteractor
 import org.organizesport.android.interactor.SportsListActivityInteractor
@@ -19,6 +22,7 @@ import javax.inject.Singleton
 @Singleton
 @Component(modules = arrayOf(ModelModule::class))
 interface ModelComponent {
+    fun provideContext(): Context
     fun injectDependency(loginInteractor: LoginActivityInteractor)
     fun injectDependency(sportsListInteractor: SportsListActivityInteractor)
     fun injectDependency(rssfeedInteractor: RssFeedActivityInteractor)

@@ -18,9 +18,11 @@ import org.organizesport.android.view.BaseActivity
 import org.organizesport.android.BaseApplication
 import org.organizesport.android.R
 import org.organizesport.android.SportsListContract
+import org.organizesport.android.entity.Sport
 import org.organizesport.android.presenter.SportsListActivityPresenter
 import org.organizesport.android.utils.addClickAction
 import org.organizesport.android.view.adapters.SportsListAdapter
+
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.commands.Command
 import ru.terrakok.cicerone.commands.Forward
@@ -63,39 +65,52 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
     private val toolbar: Toolbar by lazy { toolbar_toolbar_view }
     private val rssFeedBtn: FloatingActionButton by lazy { fab_feeds_activity_sports_list }
     private var presenter: SportsListContract.Presenter? = null
-    private val lvSportsList: ListView? by lazy { lv_splist_activity_sports_list }
-    private val progressBar: ProgressBar? by lazy { pb_loading_activity_sports_list }
-    private val tvNoData: TextView? by lazy { tv_no_data_activity_sports_list }
-    private val adapter: SportsListAdapter? by lazy {
+    private val adapter: SportsListAdapter by lazy {
         SportsListAdapter(
                 this,
                 R.layout.list_view_custom_layout,
-                HashMap()
-        )
+                HashMap())
     }
+    private val lvSportsList: ListView? by lazy { lv_splist_activity_sports_list }
+    private val progressBar: ProgressBar? by lazy { pb_loading_activity_sports_list }
+    private val tvNoData: TextView? by lazy { tv_no_data_activity_sports_list }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sports_list)
 
-        rssFeedBtn.addClickAction({
-            presenter?.fabClicked(adapter?.getDataMap())
-        })
         presenter = SportsListActivityPresenter(this)
 
         lvSportsList?.setOnItemClickListener { _, _, position, _ ->
             Log.d(TAG, "item clicked")
-            presenter?.listItemClicked(adapter?.getItem(position)?.keys?.elementAt(0))
+            presenter?.listItemClicked(adapter.getItem(position).keys.elementAt(0).name)
         }
         lvSportsList?.emptyView = tvNoData   // 'View' to be shown when no data is available
         lvSportsList?.adapter = adapter
 
+        rssFeedBtn.addClickAction({
+            presenter?.fabClicked((lvSportsList?.adapter as? SportsListAdapter)?.getDataMap())
+
+        })
         presenter?.onViewCreated()
     }
 
     override fun onResume() {
         super.onResume()
         BaseApplication.INSTANCE.cicerone.navigatorHolder.setNavigator(this.navigator)
+    }
+
+    override fun onSaveInstanceState(outState: Bundle?) {
+        super.onSaveInstanceState(outState)
+        presenter?.onSaveInstanceState(
+                outState,
+                (lvSportsList?.adapter as? SportsListAdapter)?.getDataMap()
+        )
+    }
+
+    override fun onRestoreInstanceState(inState: Bundle?) {
+        super.onRestoreInstanceState(inState)
+        presenter?.onRestoreInstanceState(inState)
     }
 
     override fun onPause() {
@@ -109,8 +124,8 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
         toast(msg)
     }
 
-    override fun publishListData(map: Map<String, Boolean>) {
-        adapter?.updateData(map)
+    override fun publishListData(map: Map<Sport, Boolean>) {
+        (lvSportsList?.adapter as? SportsListAdapter)?.updateData(map)
     }
 
     override fun showLoading() {
@@ -121,6 +136,11 @@ class SportsListActivity : BaseActivity(), SportsListContract.View {
     override fun hideLoading() {
         progressBar?.visibility = View.GONE
         lvSportsList?.isEnabled = true
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 
     override fun onDestroy() {

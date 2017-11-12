@@ -1,5 +1,8 @@
 package org.organizesport.android
 
+import android.os.Bundle
+import org.organizesport.android.entity.Sport
+
 /**
  * Contract interfaces for 'View' and 'Presenter' regarding {@link SportsListActivity}
  *
@@ -9,7 +12,7 @@ package org.organizesport.android
 interface SportsListContract {
     interface View {
         fun showInfoMessage(msg: String)
-        fun publishListData(map: Map<String, Boolean>)
+        fun publishListData(map: Map<Sport, Boolean>)
         fun showLoading()
         fun hideLoading()
     }
@@ -17,24 +20,22 @@ interface SportsListContract {
     interface Presenter {
         // User actions
         fun listItemClicked(sport: String?)
-        fun fabClicked(dataMap: Map<String, Boolean>?)
+        fun fabClicked(dataMap: Map<Sport, Boolean>?)
         // Model updates
         fun onViewCreated()
+        fun onSaveInstanceState(outState: Bundle?, dataMap: Map<Sport, Boolean>?)
+        fun onRestoreInstanceState(inState: Bundle?)
         fun onDestroy()
     }
 
     interface Interactor {
         fun loadSportsList()
-        fun loadUserSportsList()
-        fun queryUserData(dataKey: String, newData: String?)
-        fun updateUserData(dataKey: String, data: List<String>)
+        fun updateUserData(dataKey: String, sport: String?)
         fun unregister()
     }
 
     interface InteractorOutput {
-        fun onSportsListLoaded(list: List<String>)
-        fun onUserSportsListLoaded(list: List<String>)
-        fun onQueryResult(list: List<String>)
+        fun onSportsListLoaded(map: Map<Sport, Boolean>)
         fun noNetworkAccess()
         fun onDataError()
     }

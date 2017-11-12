@@ -1,7 +1,6 @@
-package org.organizesport.android.organizesport_android
+package org.organizesport.android
 
 import org.junit.Test
-
 import org.junit.Assert.*
 
 /**
@@ -12,7 +11,7 @@ import org.junit.Assert.*
 class ExampleUnitTest {
     @Test
     @Throws(Exception::class)
-    fun addition_isCorrect() {
+    fun additionIsCorrect() {
         assertEquals(4, (2 + 2).toLong())
     }
 }

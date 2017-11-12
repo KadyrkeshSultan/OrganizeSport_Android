@@ -6,6 +6,9 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjectionModule
+import dagger.android.support.AndroidSupportInjection
 import org.organizesport.android.BaseApplication
 import org.organizesport.android.LoginContract
 import org.organizesport.android.entity.User
