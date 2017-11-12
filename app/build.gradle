@@ -3,6 +3,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 // Applies Kotlin extensions plugin
 apply plugin: 'kotlin-android-extensions'   // Allows to import 'View' objects (no more findViewB...)
+// Applies Kotlin Annotation Processor Tool
+apply plugin: 'kotlin-kapt'
 // Applies Kotlin documentation plugin
 apply plugin: 'org.jetbrains.dokka'
 
@@ -90,10 +92,6 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
-    }
-    // Enable Kotlin Annotation Processing
-    kapt {
-        generateStubs = true
     }
 }
 
