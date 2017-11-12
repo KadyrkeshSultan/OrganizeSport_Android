@@ -1,8 +1,10 @@
 package org.organizesport.android.di
 
+import android.app.Application
 import android.content.Context
 import dagger.Module
 import dagger.Provides
+import dagger.android.AndroidInjectionModule
 import javax.inject.Singleton
 
 /**
@@ -12,14 +14,14 @@ import javax.inject.Singleton
  * @author pablol.
  * @since 1.0
  */
-@Module class ModelModule(private val context: Context) {
-
+@Module
+class ModelModule(private val appContext: Context) {
     /**
      * Since it is annotated with the Dagger {@link Provides} annotation, this method will provide
-     * a certain type of dependency; specifically, a {@link SharedPreferences} instance.
+     * a certain type of dependency; specifically, a {@link Context} instance.
      *
      * @return the dependency to be injected in the app, at some point.
      */
-    @Singleton @Provides
-    fun provideContext(): Context = context
+    @Provides
+    fun provideContext(): Context = appContext
 }

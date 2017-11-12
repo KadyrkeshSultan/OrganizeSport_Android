@@ -17,7 +17,6 @@ import org.organizesport.android.view.activities.LoginActivity
 import android.support.test.espresso.matcher.RootMatchers.withDecorView
 import org.hamcrest.CoreMatchers.`is`
 import org.hamcrest.CoreMatchers.not
-import org.organizesport.android.view.activities.SportsListActivity
 
 
 /**

@@ -5,8 +5,6 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'   // Allows to import 'View' objects (no more findViewB...)
 // Applies Kotlin documentation plugin
 apply plugin: 'org.jetbrains.dokka'
-// Applies Kotlin Annotation Processing Tool (for Dagger2)
-apply plugin: 'kotlin-kapt'
 
 // Gets current date in a specific format (e.g.: #Tue Apr 18 09:36:31 CEST 2017)
 def getDate() {
@@ -69,7 +67,6 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-
     flavorDimensions "default"
     productFlavors {
         // Development flavor
@@ -84,6 +81,7 @@ android {
         prod {
         }
     }
+
     // Although Gradle will compile any Kotlin files it finds in 'src/main/java', it's good practice
     // to store your Kotlin files in a dedicated Kotlin directory. Here, the Kotlin plugin has added
     // a 'src/main/kotlin', a 'src/test/kotlin', and a 'src/androidTest/kotlin' declaration to
@@ -92,6 +90,10 @@ android {
         main.java.srcDirs += 'src/main/kotlin'
         test.java.srcDirs += 'src/test/kotlin'
         androidTest.java.srcDirs += 'src/androidTest/kotlin'
+    }
+    // Enable Kotlin Annotation Processing
+    kapt {
+        generateStubs = true
     }
 }
 
@@ -128,12 +130,19 @@ dependencies {
     compile "com.squareup.retrofit2:adapter-rxjava2:$rootProject.ext.retrofit2Version"
     compile "com.squareup.retrofit2:converter-gson:$rootProject.ext.retrofit2Version"  // JSON converter
     // Including Dagger 2
-    kapt "com.google.dagger:dagger-compiler:$rootProject.ext.dagger2Version"
+    //--- Dagger core dependencies
     compile "com.google.dagger:dagger:$rootProject.ext.dagger2Version"
+    annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.ext.dagger2Version"   // Only for Java
+    kapt "com.google.dagger:dagger-compiler:$rootProject.ext.dagger2Version"
+    //--- Dagger Android dependencies
+    compile "com.google.dagger:dagger-android-support:$rootProject.ext.dagger2Version"
+    annotationProcessor "com.google.dagger:dagger-android-processor:$rootProject.ext.dagger2Version"   // Only for Java
+    kapt "com.google.dagger:dagger-android-processor:$rootProject.ext.dagger2Version"
     // Required -- JUnit 4 framework and Kotlin for testing
     testCompile "junit:junit:$rootProject.ext.junitVersion"
     testCompile "org.jetbrains.kotlin:kotlin-stdlib:$rootProject.ext.kotlinVersion"
     testCompile "org.jetbrains.kotlin:kotlin-test-junit:$rootProject.ext.kotlinVersion"
+    testCompile "org.mockito:mockito-core:$rootProject.ext.mockitoVersion"
     // Optional -- LeakCanary
     debugCompile "com.squareup.leakcanary:leakcanary-android:$rootProject.ext.leakcanaryVersion"
     // No-Op version of LeakCanary for release builds: no notifications, no analysis,...

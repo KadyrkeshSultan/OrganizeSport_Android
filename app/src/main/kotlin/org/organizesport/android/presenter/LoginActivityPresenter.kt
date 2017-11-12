@@ -1,10 +1,9 @@
 package org.organizesport.android.presenter
 
-import android.text.TextUtils
+import android.os.Bundle
 import org.organizesport.android.BaseApplication
 import org.organizesport.android.LoginContract
 import org.organizesport.android.interactor.LoginActivityInteractor
-import org.organizesport.android.view.activities.SampleActivity
 import org.organizesport.android.view.activities.SportsListActivity
 
 import ru.terrakok.cicerone.Router
@@ -32,13 +31,27 @@ class LoginActivityPresenter(private var view: LoginContract.View?) : LoginContr
             })
         }
     }
+
     private var userEmail: String? = null
     private var loginStatus: LoginStatus = LoginStatus.LOGIN
     private var interactor: LoginContract.Interactor? = LoginActivityInteractor(this)
     private val router: Router? by lazy { BaseApplication.INSTANCE.cicerone.router }
 
+    override fun onSaveInstanceState(outState: Bundle?) {
+        outState?.putSerializable("data", loginStatus)
+    }
+
+    override fun onRestoreInstanceState(inState: Bundle?) {
+        val data = inState?.get("data") as LoginStatus
+        data.let {
+            loginStatus = it
+        }
+    }
+
     override fun loginClicked(email: String, password: String) {
-        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
+        // 'isEmpty()' is a kotlin-stdlib extension function for any 'CharSequence' object
+        // This function avoids using any 'TextUtils' static method (good for unit tests!!)
+        if (!email.isEmpty() && !password.isEmpty()) {
             view?.showLoading()
             interactor?.login(email, password)
         } else {
@@ -47,7 +60,7 @@ class LoginActivityPresenter(private var view: LoginContract.View?) : LoginContr
     }
 
     override fun registerClicked(email: String, password: String) {
-        if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password)) {
+        if (!email.isEmpty() && !password.isEmpty()) {
             view?.showLoading()
             userEmail = email
             interactor?.register(email, password)
@@ -58,10 +71,7 @@ class LoginActivityPresenter(private var view: LoginContract.View?) : LoginContr
 
     override fun accessModeStatusClicked() {
         loginStatus = loginStatus.toggle()
-        when (loginStatus) {
-            LoginStatus.LOGIN -> view?.showLoginUi()
-            LoginStatus.REGISTER -> view?.showRegisterUi()
-        }
+        this.updateAccessModeStatus(loginStatus)
     }
 
     override fun onRegisterError() {
@@ -95,8 +105,15 @@ class LoginActivityPresenter(private var view: LoginContract.View?) : LoginContr
     }
 
     override fun onViewCreated() {
-        view?.showLoginUi()
+        this.updateAccessModeStatus(loginStatus)
         view?.clearTextFields()
+    }
+
+    private fun updateAccessModeStatus(loginStatus: LoginStatus) {
+        when (loginStatus) {
+            LoginStatus.LOGIN -> view?.showLoginUi()
+            LoginStatus.REGISTER -> view?.showRegisterUi()
+        }
     }
 
     override fun onDestroy() {

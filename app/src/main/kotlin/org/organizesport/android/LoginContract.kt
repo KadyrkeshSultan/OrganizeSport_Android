@@ -1,5 +1,7 @@
 package org.organizesport.android
 
+import android.os.Bundle
+
 /**
  * Contract interfaces for 'View' and 'Presenter' regarding {@link LoginActivity}
  *
@@ -23,6 +25,8 @@ interface LoginContract {
         fun accessModeStatusClicked()
         // Model updates
         fun onViewCreated()
+        fun onSaveInstanceState(outState: Bundle?)
+        fun onRestoreInstanceState(inState: Bundle?)
         fun onDestroy()
     }
 
